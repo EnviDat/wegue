@@ -1,0 +1,187 @@
+{
+
+  "colorTheme": {
+    "dark": false,
+    "themes": {
+      "light": {
+        "primary": "#00897b",
+        "secondary": "#35a89d",
+        "highlight": "#71c5bd",
+        "info": "#92e5ef",
+        "success": "#8ae0de",
+        "warning": "#ffc107",
+        "error": "#ff847b",
+        "errorHighlight": "#ffb060",
+        "accent": "#FFD740"
+      
+      }
+    }
+  },
+
+  "logo": "https://avatars.githubusercontent.com/u/24525923?s=200&v=4",
+  "logoWidth": "100",
+  "logoHeight": "100",
+
+  "showCopyrightYear": true,
+
+  "lang": {
+    "supported": {
+      "en": "English",
+      "de": "Deutsch"
+    },
+    "fallback": "en"
+  },
+
+  "mapZoom": 2,
+  "mapCenter": [0, 0],
+  "mapGeodataDragDop": {
+    "formats": ["GeoJSON", "KML"],
+    "zoomToData": true,
+    "replaceData": true,
+    "displayInLayerList": true
+  },
+
+  "overviewMap" : {
+    "visible": false
+  },
+
+  "viewAnimation": {
+    "type": "fly",
+    "options": {
+      "duration": 3000,
+      "zoom": 15,
+      "maxZoom": 15
+    }
+  },
+
+  "permalink": {
+    "location": "hash",
+    "layers": true,
+    "extent": false,
+    "projection": "EPSG:4326",
+    "paramPrefix": "",
+    "history": true
+  },
+
+  "mapLayers": [
+
+    {
+      "type": "VECTOR",
+      "lid": "gendib_27_02_2023",
+      "url": "./static/data/gendib_27_02_2023.geojson",
+      "formatConfig": {
+      },
+      "format": "GeoJSON",
+      "visible": true,
+      "selectable": true,
+      "style": {
+        "radius": 4,
+        "strokeColor": "purple",
+        "strokeWidth": 2,
+        "fillColor": "rgba(155,153,51,0.5)",
+        "label": {
+          "attribute": "gendib_pop_id",
+          "minResolution": 4.0,
+          "outlineColor": "white",
+          "outlineWidth": 2,
+          "fillColor": "black",
+          "offsetX": 0,
+          "offsetY": 15,
+          "align": "center"
+        }
+      },
+      "columnMapping": {
+        "species_kingdom": "Species Kingdom",
+        "species_scientific": "Species Name",
+        "institution_list": "Institution",
+        "publication_year": "Year",
+        "article_doi": "DOI",
+        "data_link": "Data Link"
+      },
+      "selectStyle": {
+        "radius": 10,
+        "strokeColor": "gray",
+        "strokeWidth": 5,
+        "fillColor": "rgb(255, 255, 0, 0.2)"
+      },
+      "doAppendSelectStyle": true
+    },
+
+    {
+      "type": "XYZ",
+      "url": "https://tile.opentopomap.org/{z}/{x}/{y}.png",
+      "lid": "opentopomap",
+      "isBaseLayer": true,
+      "visible": false,
+      "crossOrigin": "anonymous"
+    },
+
+    {
+      "type": "OSM",
+      "lid": "osm-bg",
+      "isBaseLayer": true,
+      "visible": true,
+      "crossOrigin": "anonymous"
+    }
+
+  ],
+
+  "modules": {
+    "wgu-geocoder": {
+      "target": "toolbar",
+      "minChars": 2,
+      "queryDelay": 200,
+      "debug": false,
+      "provider": "osm",
+      "providerOptions": {
+        "lang": "en-US",
+        "countrycodes": "",
+        "limit": 6
+      }
+    },
+    "wgu-layerlist": {
+      "target": "toolbar",
+      "win": "floating",
+      "icon": "layers",
+      "draggable": false
+    },
+    "wgu-infoclick": {
+      "target": "toolbar",
+      "win": "floating",
+      "icon": "info",
+      "draggable": false,
+      "initPos": {
+        "left": 8,
+        "top": 74
+      },
+      "showMedia": false
+    },
+    "wgu-attributetable": {
+      "target": "toolbar",
+      "win": "floating",
+      "icon": "table_chart",
+      "syncTableMapSelection": true
+    },
+    "wgu-zoomtomaxextent": {
+      "target": "toolbar"
+    },
+    "wgu-localeswitcher": {
+      "target": "menu"
+    },
+    "wgu-measuretool": {
+      "target": "menu",
+      "win": "floating",
+      "icon": "photo_size_select_small",
+      "draggable": false,
+      "strokeColor": "#c62828",
+      "fillColor": "rgba(198,40,40,0.2)",
+      "sketchStrokeColor": "rgba(198,40,40,0.8)",
+      "sketchFillColor": "rgba(198,40,40,0.1)",
+      "sketchVertexStrokeColor": "#c62828",
+      "sketchVertexFillColor": "rgba(198,40,40,0.2)"
+    },
+    "wgu-geolocator": {
+      "target": "menu"
+    }
+  }
+}
