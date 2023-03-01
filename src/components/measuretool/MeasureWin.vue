@@ -89,7 +89,7 @@ export default {
      * @param  {String} newMeasureType New measure type
      * @param  {String} oldMeasureType Old measure type
      */
-    applyMeasureType(newMeasureType, oldMeasureType) {
+    applyMeasureType(newMeasureType /*, oldMeasureType */) {
       this.measureType = newMeasureType;
     },
     /**

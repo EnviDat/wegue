@@ -110,7 +110,7 @@ export default class OlMeasureController {
         // preserve sketch
         sketch = evt.feature;
 
-        listener = me.map.on("click", (evt) => {
+        listener = me.map.on("click", (/* evt */) => {
           const geom = sketch.getGeometry();
           // execute given callback
           mapClickCb(geom);
