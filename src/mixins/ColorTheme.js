@@ -1,4 +1,4 @@
-import Color from '../util/Color'
+import Color from "../util/Color";
 
 /**
  * Mixin for colorTheme utils
@@ -27,11 +27,11 @@ export const ColorTheme = {
       // an object of hexa string. In the later,
       // we check the luminance for the primary
       // base.
-      if (typeof primary === 'object') {
+      if (typeof primary === "object") {
         primary = primary.base;
       }
 
       return Color.checkLuminance(primary);
-    }
-  }
-}
+    },
+  },
+};

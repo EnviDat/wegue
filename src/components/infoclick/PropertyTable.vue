@@ -1,14 +1,12 @@
 <template>
-
   <v-card-text class="px-0" v-if="show">
     <v-simple-table class="wgu-proptable">
       <tbody class="attr-tbody">
         <tr v-for="(value, key) in properties" :key="key">
           <td class="key-td">
-            {{key}}
+            {{ key }}
           </td>
-          <td class="val-td" v-html="value">
-          </td>
+          <td class="val-td" v-html="value"></td>
         </tr>
       </tbody>
     </v-simple-table>
@@ -17,18 +15,18 @@
 
 <script>
 export default {
-  name: 'wgu-property-table',
+  name: "wgu-property-table",
   props: {
-    properties: { type: Object }
+    properties: { type: Object },
   },
   computed: {
     /**
      * Display the table control only, if there are properties to show.
      */
-    show () {
+    show() {
       return this.properties && Object.keys(this.properties).length;
-    }
-  }
+    },
+  },
 };
 </script>
 

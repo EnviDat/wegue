@@ -1,60 +1,65 @@
-const path = require('path')
+const path = require("path");
 
 /**
  * @type {import('@vue/cli-service').ProjectOptions}
  */
 module.exports = {
-  assetsDir: 'static',
+  assetsDir: "static",
   runtimeCompiler: true,
   pages: {
     app: {
-      entry: 'src/main.js',
-      template: 'public/index.html',
-      filename: 'index.html',
-      title: 'Wegue WebGIS',
-      favicon: 'app/static/icon/favicon.ico'
+      entry: "src/main.js",
+      template: "public/index.html",
+      filename: "index.html",
+      title: "Wegue WebGIS",
+      favicon: "app/static/icon/favicon.ico",
     },
     embedded: {
-      entry: 'src/main.js',
-      template: 'public/embedded.html',
-      filename: 'embedded.html',
-      title: 'Wegue WebGIS Embedded',
-      favicon: 'app/static/icon/favicon.ico'
-    }
+      entry: "src/main.js",
+      template: "public/embedded.html",
+      filename: "embedded.html",
+      title: "Wegue WebGIS Embedded",
+      favicon: "app/static/icon/favicon.ico",
+    },
   },
 
   devServer: {
     client: {
-      logging: 'warn',
+      logging: "warn",
       overlay: {
         warnings: false,
-        errors: true
-      }
+        errors: true,
+      },
     },
     hot: true,
-    host: 'localhost',
+    host: "localhost",
     port: 8081,
-    open: true
+    open: true,
   },
 
-  chainWebpack: config => {
-    config.resolve.alias.set('APP', path.resolve(config.resolve.alias.get('@'), '../app'))
+  chainWebpack: (config) => {
+    config.resolve.alias.set(
+      "APP",
+      path.resolve(config.resolve.alias.get("@"), "../app")
+    );
 
-    if (process.env.NODE_ENV === 'test') {
-      config.devtool('eval')
+    if (process.env.NODE_ENV === "test") {
+      config.devtool("eval");
 
-      config.optimization.runtimeChunk(false)
-      config.optimization.splitChunks(false)
+      config.optimization.runtimeChunk(false);
+      config.optimization.splitChunks(false);
     }
 
-    return config
-      .plugin('copy')
-      .tap(options => {
-        options[0].patterns[0].from = path.resolve(options[0].patterns[0].from, '../app/static')
-        options[0].patterns[0].to = process.env.NODE_ENV === 'production'
-          ? path.resolve(options[0].patterns[0].to, '../dist/static')
-          : 'static'
-        return options
-      })
-  }
-}
+    return config.plugin("copy").tap((options) => {
+      options[0].patterns[0].from = path.resolve(
+        options[0].patterns[0].from,
+        "../app/static"
+      );
+      options[0].patterns[0].to =
+        process.env.NODE_ENV === "production"
+          ? path.resolve(options[0].patterns[0].to, "../dist/static")
+          : "static";
+      return options;
+    });
+  },
+};

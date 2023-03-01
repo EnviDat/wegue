@@ -8,7 +8,7 @@
   },
 
   "mapLayers": {
-    "wgu-drag-drop-layer" : {
+    "wgu-drag-drop-layer": {
       "name": "Hochgeladene Daten"
     },
     "Shops": {
@@ -38,23 +38,23 @@
     "osm-bg": {
       "name": "OpenStreetMap"
     },
-    "dutch-nat-parks" : {
+    "dutch-nat-parks": {
       "name": "WFS (Niederländische Nationalparks PDOK)",
       "attributions": "<a href='https://www.pdok.nl' target='_blank'>PDOK</a> des Niederländischen Katasters"
     },
-    "pdok-natura2000-wms" : {
+    "pdok-natura2000-wms": {
       "name": "WMS - Natura 2000 Gebiete - PDOK",
-	    "attributions": "<a href='https://www.pdok.nl' target='_blank'>PDOK</a> des Niederländischen Katasters"
+      "attributions": "<a href='https://www.pdok.nl' target='_blank'>PDOK</a> des Niederländischen Katasters"
     },
-    "pdok-lufo-wms" : {
+    "pdok-lufo-wms": {
       "name": "WMS - Niederländisches Luftbild - PDOK",
       "attributions": "<a href='https://www.pdok.nl' target='_blank'>PDOK</a> des Niederländischen Katasters"
     },
-    "brtachtergrondkaart" : {
+    "brtachtergrondkaart": {
       "name": "WMTS - Topo Grundkarte - PDOK",
       "attributions": "<a href='https://www.pdok.nl' target='_blank'>PDOK</a> des Niederländischen Katasters"
     },
-    "terrestris-osm-wms" : {
+    "terrestris-osm-wms": {
       "name": "OSM WMS",
       "attributions": "<a href='https://www.openstreetmap.org/copyright' target='_blank'>© OpenStreetMap-Mitwirkende</a>"
     }

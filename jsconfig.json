@@ -8,12 +8,7 @@
       "@/*": ["src/*"],
       "APP/*": ["app/*"]
     },
-    "lib": [
-      "esnext",
-      "dom",
-      "dom.iterable",
-      "scripthost"
-    ]
+    "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
   },
   "exclude": ["dist", "node_modules"]
 }

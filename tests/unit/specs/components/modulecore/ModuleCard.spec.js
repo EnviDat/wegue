@@ -1,47 +1,47 @@
-import ModuleCard from '@/components/modulecore/ModuleCard'
-import { shallowMount } from '@vue/test-utils';
+import ModuleCard from "@/components/modulecore/ModuleCard";
+import { shallowMount } from "@vue/test-utils";
 
 const moduleProps = {
-  moduleName: 'my-module',
-  icon: 'my-icon',
-  win: 'floating'
-}
+  moduleName: "my-module",
+  icon: "my-icon",
+  win: "floating",
+};
 
-describe('modulecore/ModuleCard.vue', () => {
-  it('is defined', () => {
-    expect(ModuleCard).to.not.be.an('undefined');
+describe("modulecore/ModuleCard.vue", () => {
+  it("is defined", () => {
+    expect(ModuleCard).to.not.be.an("undefined");
   });
 
-  it('has a created hook', () => {
-    expect(ModuleCard.created).to.be.a('function');
+  it("has a created hook", () => {
+    expect(ModuleCard.created).to.be.a("function");
   });
 
-  describe('props', () => {
+  describe("props", () => {
     let comp;
     beforeEach(() => {
       comp = shallowMount(ModuleCard, {
-        propsData: moduleProps
+        propsData: moduleProps,
       });
     });
 
-    it('has correct default props', () => {
+    it("has correct default props", () => {
       expect(comp.vm.minimizable).to.equal(false);
       expect(comp.vm.backgroundImage).to.be.undefined;
       expect(comp.vm.draggable).to.equal(true);
       expect(comp.vm.visible).to.equal(false);
-      expect(comp.vm.initPos).to.be.an('undefined');
-      expect(comp.vm.height).to.be.an('undefined');
-      expect(comp.vm.width).to.be.an('undefined');
-      expect(comp.vm.maxHeight).to.be.an('undefined');
-      expect(comp.vm.maxWidth).to.be.an('undefined');
-      expect(comp.vm.minHeight).to.be.an('undefined');
-      expect(comp.vm.minWidth).to.be.an('undefined');
+      expect(comp.vm.initPos).to.be.an("undefined");
+      expect(comp.vm.height).to.be.an("undefined");
+      expect(comp.vm.width).to.be.an("undefined");
+      expect(comp.vm.maxHeight).to.be.an("undefined");
+      expect(comp.vm.maxWidth).to.be.an("undefined");
+      expect(comp.vm.minHeight).to.be.an("undefined");
+      expect(comp.vm.minWidth).to.be.an("undefined");
     });
 
-    it('has correct props', () => {
-      expect(comp.vm.moduleName).to.equal('my-module');
-      expect(comp.vm.icon).to.equal('my-icon');
-      expect(comp.vm.win).to.equal('floating');
+    it("has correct props", () => {
+      expect(comp.vm.moduleName).to.equal("my-module");
+      expect(comp.vm.icon).to.equal("my-icon");
+      expect(comp.vm.win).to.equal("floating");
     });
 
     afterEach(() => {
@@ -49,15 +49,15 @@ describe('modulecore/ModuleCard.vue', () => {
     });
   });
 
-  describe('data', () => {
+  describe("data", () => {
     let comp;
     beforeEach(() => {
       comp = shallowMount(ModuleCard, {
-        propsData: moduleProps
+        propsData: moduleProps,
       });
     });
 
-    it('has correct default data', () => {
+    it("has correct default data", () => {
       expect(comp.vm.show).to.equal(false);
       expect(comp.vm.minimized).to.equal(false);
     });
@@ -67,15 +67,15 @@ describe('modulecore/ModuleCard.vue', () => {
     });
   });
 
-  describe('methods', () => {
+  describe("methods", () => {
     let comp;
     beforeEach(() => {
       comp = shallowMount(ModuleCard, {
-        propsData: moduleProps
+        propsData: moduleProps,
       });
     });
 
-    it('toggleUi switches show', () => {
+    it("toggleUi switches show", () => {
       comp.vm.show = false;
       comp.vm.toggleUi();
       expect(comp.vm.show).to.equal(true);

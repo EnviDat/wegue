@@ -1,9 +1,9 @@
-import AppSidebar from 'APP/components/AppSidebar';
-import { WguEventBus } from '@/WguEventBus';
-import { shallowMount } from '@vue/test-utils';
+import AppSidebar from "APP/components/AppSidebar";
+import { WguEventBus } from "@/WguEventBus";
+import { shallowMount } from "@vue/test-utils";
 
-describe('AppSidebar.vue', () => {
-  describe('data', () => {
+describe("AppSidebar.vue", () => {
+  describe("data", () => {
     let comp;
     let vm;
     beforeEach(() => {
@@ -11,12 +11,12 @@ describe('AppSidebar.vue', () => {
       vm = comp.vm;
     });
 
-    it('has correct default data', () => {
+    it("has correct default data", () => {
       expect(vm.sidebarOpen).to.equal(true);
     });
   });
 
-  describe('events', () => {
+  describe("events", () => {
     let comp;
     let vm;
     beforeEach(() => {
@@ -26,10 +26,10 @@ describe('AppSidebar.vue', () => {
 
     it('event "sidebar-toggle" forces correct open state', () => {
       // force closing sidebar by adding 'false' parameter
-      WguEventBus.$emit('sidebar-toggle', false);
+      WguEventBus.$emit("sidebar-toggle", false);
       expect(vm.sidebarOpen).to.equal(false);
       // toggle sidebar open state by skipping parameter
-      WguEventBus.$emit('sidebar-toggle');
+      WguEventBus.$emit("sidebar-toggle");
       expect(vm.sidebarOpen).to.equal(true);
     });
   });

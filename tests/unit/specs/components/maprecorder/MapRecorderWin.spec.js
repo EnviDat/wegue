@@ -1,24 +1,24 @@
-import MapRecorderWin from '@/components/maprecorder/MapRecorderWin'
-import { shallowMount } from '@vue/test-utils';
-import OlMap from 'ol/Map';
-import VectorLayer from 'ol/layer/Vector';
-import VectorSource from 'ol/source/Vector';
+import MapRecorderWin from "@/components/maprecorder/MapRecorderWin";
+import { shallowMount } from "@vue/test-utils";
+import OlMap from "ol/Map";
+import VectorLayer from "ol/layer/Vector";
+import VectorSource from "ol/source/Vector";
 
-describe('maprecorder/MapRecorderWin.vue', () => {
-  it('is defined', () => {
-    expect(MapRecorderWin).to.not.be.an('undefined');
+describe("maprecorder/MapRecorderWin.vue", () => {
+  it("is defined", () => {
+    expect(MapRecorderWin).to.not.be.an("undefined");
   });
 
-  describe('props', () => {
+  describe("props", () => {
     let comp;
     let vm;
     beforeEach(() => {
       comp = shallowMount(MapRecorderWin);
-      vm = comp.vm
+      vm = comp.vm;
     });
 
-    it('has correct default props', () => {
-      expect(vm.icon).to.equal('mdi-video');
+    it("has correct default props", () => {
+      expect(vm.icon).to.equal("mdi-video");
     });
 
     afterEach(() => {
@@ -26,16 +26,16 @@ describe('maprecorder/MapRecorderWin.vue', () => {
     });
   });
 
-  describe('data', () => {
+  describe("data", () => {
     let comp;
     let vm;
     beforeEach(() => {
       comp = shallowMount(MapRecorderWin);
-      vm = comp.vm
+      vm = comp.vm;
     });
 
-    it('has correct default data', () => {
-      expect(vm.moduleName).to.equal('wgu-maprecorder');
+    it("has correct default data", () => {
+      expect(vm.moduleName).to.equal("wgu-maprecorder");
       expect(vm.mapCanvas).to.be.null;
       expect(vm.mapContext).to.be.null;
       expect(vm.recorder).to.be.null;
@@ -46,7 +46,7 @@ describe('maprecorder/MapRecorderWin.vue', () => {
       expect(vm.timerHandle).to.be.null;
       expect(vm.error).to.equal(false);
       // Supported codecs under chrome.
-      expect(vm.mimeType).to.equal('video/webm');
+      expect(vm.mimeType).to.equal("video/webm");
       expect(vm.mimeTypes.length).to.equal(2);
     });
 
@@ -55,28 +55,28 @@ describe('maprecorder/MapRecorderWin.vue', () => {
     });
   });
 
-  describe('methods', () => {
+  describe("methods", () => {
     let comp;
     let vm;
     beforeEach(() => {
       comp = shallowMount(MapRecorderWin);
-      vm = comp.vm
+      vm = comp.vm;
     });
 
-    it('correct supported mime types under chrome', () => {
+    it("correct supported mime types under chrome", () => {
       const mimeTypes = vm.getSupportedMimeTypes();
       expect(mimeTypes.length).to.equal(2);
-      expect(mimeTypes[0]).to.equal('video/webm');
-      expect(mimeTypes[1]).to.equal('video/x-matroska');
+      expect(mimeTypes[0]).to.equal("video/webm");
+      expect(mimeTypes[1]).to.equal("video/x-matroska");
     });
 
-    it('start / stop recording sets correct states', () => {
+    it("start / stop recording sets correct states", () => {
       const layer = new VectorLayer({
         visible: true,
-        source: new VectorSource()
+        source: new VectorSource(),
       });
       const map = new OlMap({
-        layers: [layer]
+        layers: [layer],
       });
       map.setSize([1024, 768]);
       vm.map = map;

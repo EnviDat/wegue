@@ -6,10 +6,13 @@
  * For the original source of ol-ext see https://github.com/Viglino/ol-ext.
  */
 
-import TileSource from 'ol/source/Tile'
-import TileWMSSource from 'ol/source/TileWMS'
-import { containsCoordinate as extentContainsCoordinate } from 'ol/extent'
-import { transform as projTransform, /* get as getProjection, */ equivalent as projEquivalent } from 'ol/proj'
+import TileSource from "ol/source/Tile";
+import TileWMSSource from "ol/source/TileWMS";
+import { containsCoordinate as extentContainsCoordinate } from "ol/extent";
+import {
+  transform as projTransform,
+  /* get as getProjection, */ equivalent as projEquivalent,
+} from "ol/proj";
 
 const TileSourcePreview = {
   /**
@@ -20,12 +23,14 @@ const TileSourcePreview = {
    * @param {ol.Projection} projection Projection of the coordinates.
    * @returns {String} The preview url.
    */
-  getUrl (source, coords, resolution, projection) {
-    const coord = source.getTileGrid().getTileCoordForCoordAndResolution(coords, resolution);
+  getUrl(source, coords, resolution, projection) {
+    const coord = source
+      .getTileGrid()
+      .getTileCoordForCoordAndResolution(coords, resolution);
     const fn = source.getTileUrlFunction();
     return fn.call(source, coord, projection);
-  }
-}
+  },
+};
 
 const TileWMSSourcePreview = {
   /**
@@ -36,11 +41,15 @@ const TileWMSSourcePreview = {
    * @param {ol.Projection} projection Projection of the coordinates.
    * @returns {String} The preview url.
    */
-  getUrl (source, coords, resolution, projection) {
+  getUrl(source, coords, resolution, projection) {
     const fn = source.getTileUrlFunction();
     if (fn) {
-      const tileGrid = source.getTileGrid() || source.getTileGridForProjection(projection);
-      const coord = tileGrid.getTileCoordForCoordAndResolution(coords, resolution);
+      const tileGrid =
+        source.getTileGrid() || source.getTileGridForProjection(projection);
+      const coord = tileGrid.getTileCoordForCoordAndResolution(
+        coords,
+        resolution
+      );
       return fn.call(source, coord, 1, projection);
     }
 
@@ -48,10 +57,10 @@ const TileWMSSourcePreview = {
     let url = source.getGetFeatureInfoUrl
       ? source.getGetFeatureInfoUrl(coords, resolution, projection, {})
       : source.getFeatureInfoUrl(coords, resolution, projection, {});
-    url = url.replace(/getfeatureinfo/i, 'GetMap');
+    url = url.replace(/getfeatureinfo/i, "GetMap");
     return url;
-  }
-}
+  },
+};
 
 const LayerPreview = {
   /**
@@ -62,7 +71,7 @@ const LayerPreview = {
    * @param {ol.Projection} projection The view projection.
    * @returns {String} Preview url or undefined if no preview can be produced.
    */
-  getUrl (layer, coords, resolution, projection) {
+  getUrl(layer, coords, resolution, projection) {
     const source = layer.getSource();
 
     // If we cannot obtain a source, no preview can be produced.
@@ -72,7 +81,10 @@ const LayerPreview = {
 
     try {
       // Clamp the resolution within the resolution supported by the layer.
-      resolution = Math.max(Math.min(resolution, layer.getMaxResolution()), layer.getMinResolution());
+      resolution = Math.max(
+        Math.min(resolution, layer.getMaxResolution()),
+        layer.getMinResolution()
+      );
 
       // Make sure to request an extent within the layers extent.
       const e = layer.getExtent();
@@ -89,15 +101,20 @@ const LayerPreview = {
 
       // Obtain the image URL from the source.
       if (source instanceof TileWMSSource) {
-        return TileWMSSourcePreview.getUrl(source, coords, resolution, projection);
+        return TileWMSSourcePreview.getUrl(
+          source,
+          coords,
+          resolution,
+          projection
+        );
       } else if (source instanceof TileSource) {
-        return TileSourcePreview.getUrl(source, coords, resolution, projection)
+        return TileSourcePreview.getUrl(source, coords, resolution, projection);
       }
     } catch (e) {
-      console.error('failed to create preview: ' + e);
+      console.error("failed to create preview: " + e);
     }
     return undefined;
-  }
-}
+  },
+};
 
 export default LayerPreview;

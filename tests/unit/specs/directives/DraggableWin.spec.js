@@ -1,4 +1,4 @@
-import { DraggableWin } from '@/directives/DraggableWin'
+import { DraggableWin } from "@/directives/DraggableWin";
 // import TileLayer from 'ol/layer/Tile';
 // import TileWmsSource from 'ol/source/TileWMS';
 // import OsmSource from 'ol/source/OSM';
@@ -12,8 +12,8 @@ import { DraggableWin } from '@/directives/DraggableWin'
 // import TopoJsonFormat from 'ol/format/TopoJSON'
 // import KmlFormat from 'ol/format/KML'
 
-describe('DraggableWin Directive', () => {
-  it('is defined', () => {
+describe("DraggableWin Directive", () => {
+  it("is defined", () => {
     expect(typeof DraggableWin).to.not.equal(undefined);
   });
 
@@ -26,52 +26,56 @@ describe('DraggableWin Directive', () => {
   //   expect(typeof LayerFactory.createVectorTileLayer).to.equal('function');
   // });
 
-  describe('functions', () => {
-    describe('bind', () => {
-      it('exits if binding.value=false', () => {
+  describe("functions", () => {
+    describe("bind", () => {
+      it("exits if binding.value=false", () => {
         DraggableWin.bind(null, { value: false });
         expect(DraggableWin.dragConfig.draggableElementSelector).to.equal(null);
       });
 
-      it('exits if no header in elem', () => {
-        const mockDomEl = document.createElement('div');
+      it("exits if no header in elem", () => {
+        const mockDomEl = document.createElement("div");
 
         DraggableWin.bind(mockDomEl, { value: true });
         expect(DraggableWin.dragConfig.draggableElementSelector).to.equal(null);
       });
 
-      it('sets correct default draggableElementSelector', () => {
-        const mockDomEl = document.createElement('div');
-        const mockHeaderEl = document.createElement('div');
-        mockHeaderEl.classList.add('wgu-win-title');
+      it("sets correct default draggableElementSelector", () => {
+        const mockDomEl = document.createElement("div");
+        const mockHeaderEl = document.createElement("div");
+        mockHeaderEl.classList.add("wgu-win-title");
         mockDomEl.append(mockHeaderEl);
 
         DraggableWin.bind(mockDomEl, { arg: false, value: true });
-        expect(DraggableWin.dragConfig.draggableElementSelector).to.equal('wgu-win-title');
+        expect(DraggableWin.dragConfig.draggableElementSelector).to.equal(
+          "wgu-win-title"
+        );
         // cleanup
         mockHeaderEl.parentNode.removeChild(mockHeaderEl);
       });
 
-      it('applies draggableElementSelector from bindig.arg', () => {
-        const mockDomEl = document.createElement('div');
-        const mockHeaderEl = document.createElement('div');
-        mockHeaderEl.classList.add('wgu-win-title');
+      it("applies draggableElementSelector from bindig.arg", () => {
+        const mockDomEl = document.createElement("div");
+        const mockHeaderEl = document.createElement("div");
+        mockHeaderEl.classList.add("wgu-win-title");
         mockDomEl.append(mockHeaderEl);
 
-        DraggableWin.bind(mockDomEl, { arg: 'kalle', value: true });
-        expect(DraggableWin.dragConfig.draggableElementSelector).to.equal('kalle');
+        DraggableWin.bind(mockDomEl, { arg: "kalle", value: true });
+        expect(DraggableWin.dragConfig.draggableElementSelector).to.equal(
+          "kalle"
+        );
         // cleanup
         mockHeaderEl.parentNode.removeChild(mockHeaderEl);
       });
     });
   });
 
-  describe('events', () => {
-    describe('mouseup', () => {
-      it('calls correct handler', () => {
-        const mockDomEl = document.createElement('div');
-        const mockHeaderEl = document.createElement('div');
-        mockHeaderEl.classList.add('wgu-win-title');
+  describe("events", () => {
+    describe("mouseup", () => {
+      it("calls correct handler", () => {
+        const mockDomEl = document.createElement("div");
+        const mockHeaderEl = document.createElement("div");
+        mockHeaderEl.classList.add("wgu-win-title");
         mockDomEl.append(mockHeaderEl);
 
         DraggableWin.bind(mockDomEl, { arg: false, value: true });
@@ -79,21 +83,21 @@ describe('DraggableWin Directive', () => {
         let cnt = 0;
         DraggableWin.mouseup = () => {
           cnt++;
-        }
+        };
 
-        const clickEvent = document.createEvent('MouseEvents');
-        clickEvent.initEvent('mouseup', true, true);
+        const clickEvent = document.createEvent("MouseEvents");
+        clickEvent.initEvent("mouseup", true, true);
         mockDomEl.dispatchEvent(clickEvent);
 
         expect(cnt).to.equal(1);
       });
     });
 
-    describe('mousedown', () => {
-      it('calls correct handler', () => {
-        const mockDomEl = document.createElement('div');
-        const mockHeaderEl = document.createElement('div');
-        mockHeaderEl.classList.add('wgu-win-title');
+    describe("mousedown", () => {
+      it("calls correct handler", () => {
+        const mockDomEl = document.createElement("div");
+        const mockHeaderEl = document.createElement("div");
+        mockHeaderEl.classList.add("wgu-win-title");
         mockDomEl.append(mockHeaderEl);
 
         DraggableWin.bind(mockDomEl, { arg: false, value: true });
@@ -101,21 +105,21 @@ describe('DraggableWin Directive', () => {
         let cnt = 0;
         DraggableWin.mousedown = () => {
           cnt++;
-        }
+        };
 
-        const clickEvent = document.createEvent('MouseEvents');
-        clickEvent.initEvent('mousedown', true, true);
+        const clickEvent = document.createEvent("MouseEvents");
+        clickEvent.initEvent("mousedown", true, true);
         mockDomEl.dispatchEvent(clickEvent);
 
         expect(cnt).to.equal(1);
       });
     });
 
-    describe('mousemove', () => {
-      it('calls correct handler', () => {
-        const mockDomEl = document.createElement('div');
-        const mockHeaderEl = document.createElement('div');
-        mockHeaderEl.classList.add('wgu-win-title');
+    describe("mousemove", () => {
+      it("calls correct handler", () => {
+        const mockDomEl = document.createElement("div");
+        const mockHeaderEl = document.createElement("div");
+        mockHeaderEl.classList.add("wgu-win-title");
         mockDomEl.append(mockHeaderEl);
 
         DraggableWin.bind(mockDomEl, { arg: false, value: true });
@@ -123,10 +127,10 @@ describe('DraggableWin Directive', () => {
         let cnt = 0;
         DraggableWin.mousemove = () => {
           cnt++;
-        }
+        };
 
-        const clickEvent = document.createEvent('MouseEvents');
-        clickEvent.initEvent('mousemove', true, true);
+        const clickEvent = document.createEvent("MouseEvents");
+        clickEvent.initEvent("mousemove", true, true);
         mockDomEl.dispatchEvent(clickEvent);
 
         expect(cnt).to.equal(1);

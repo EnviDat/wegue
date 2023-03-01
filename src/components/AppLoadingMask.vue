@@ -1,35 +1,29 @@
 <template>
-
   <v-overlay :value="show" :opacity="0.25">
-    <v-progress-circular
-      indeterminate
-      color="primary"
-    >
-    </v-progress-circular>
+    <v-progress-circular indeterminate color="primary"> </v-progress-circular>
   </v-overlay>
-
 </template>
 
 <script>
-import { WguEventBus } from '../WguEventBus';
+import { WguEventBus } from "../WguEventBus";
 
 export default {
-  name: 'wgu-app-loading-mask',
+  name: "wgu-app-loading-mask",
   components: {},
-  data () {
+  data() {
     return {
-      show: false
-    }
+      show: false,
+    };
   },
-  created () {
-    WguEventBus.$on('app-loading-mask-toggle', (visible) => {
+  created() {
+    WguEventBus.$on("app-loading-mask-toggle", (visible) => {
       // toggle or force a visibility of the loading mask
-      if (typeof visible === 'boolean') {
+      if (typeof visible === "boolean") {
         this.show = visible;
       } else {
         this.show = !this.show;
       }
     });
-  }
-}
+  },
+};
 </script>

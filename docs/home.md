@@ -4,7 +4,6 @@ Wegue (**We**b**G**IS with OpenLayers and V**ue**) combines the power of [Vue.js
 
 ![Wegue Screenshot](_media/webmap_screenshot.jpg)
 
-
 ## Quickstart
 
 Clone the repository

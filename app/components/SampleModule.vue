@@ -28,37 +28,37 @@
 </template>
 <script>
 // the module card is a the template for a typical Wegue module
-import ModuleCard from '../../src/components/modulecore/ModuleCard';
+import ModuleCard from "../../src/components/modulecore/ModuleCard";
 // we import a so called "mixin" that helps us to interact with the map
-import { Mapable } from '../../src/mixins/Mapable';
+import { Mapable } from "../../src/mixins/Mapable";
 // an OpenLayers helper function to display coordinates
-import { toStringXY } from 'ol/coordinate';
+import { toStringXY } from "ol/coordinate";
 // an OpenLayer helper function to transform coordinate reference systems
-import { transform } from 'ol/proj.js';
+import { transform } from "ol/proj.js";
 
 export default {
-  name: 'sample-module',
+  name: "sample-module",
   // make sure to register the 'Mapable' mixin
   mixins: [Mapable],
   inheritAttrs: false,
   components: {
-    'wgu-module-card': ModuleCard
+    "wgu-module-card": ModuleCard,
   },
   props: {
-    icon: { type: String, required: false, default: 'star' }
+    icon: { type: String, required: false, default: "star" },
   },
   // here we define variables that are used in the HTML above
-  data () {
+  data() {
     return {
-      zoom: '',
-      center: ''
+      zoom: "",
+      center: "",
     };
   },
   methods: {
     /**
      * This function is called once the map is bound to the application
      */
-    onMapBound () {
+    onMapBound() {
       // the mixin 'Mapable' provides access to our OpenLayer map
       // via the variable 'this.map'
       // here we get the 'view' from the map
@@ -68,7 +68,7 @@ export default {
       this.extractMapViewProperties(view);
       // to ensure that we react on updates of the map,
       // we need to register a listener
-      view.on('change', () => {
+      view.on("change", () => {
         // always when the map view is changing we extract
         // the current zoom and center from it
         this.extractMapViewProperties(view);
@@ -82,11 +82,11 @@ export default {
      *
      * @param {ol.View} view The OpenLayers view
      */
-    extractMapViewProperties (view) {
+    extractMapViewProperties(view) {
       this.zoom = Math.round(view.getZoom());
 
       const sourceCrs = view.getProjection();
-      const targetCrs = 'EPSG:4326';
+      const targetCrs = "EPSG:4326";
 
       // we transform the coordinates from the map projection to WGS84 (EPSG:3857)
       const centerTargetCrs = transform(view.getCenter(), sourceCrs, targetCrs);
@@ -96,8 +96,8 @@ export default {
         centerTargetCrs,
         4 // <-- number of digits after comma
       );
-    }
-  }
+    },
+  },
 };
 </script>
 <!-- Here we do the styling of our module -->

@@ -1,10 +1,9 @@
-import SelectInteraction from 'ol/interaction/Select';
-import { WguEventBus } from '../WguEventBus.js';
-import { OlStyleFactory } from '../factory/OlStyle.js'
-import StyleUtil from './Style.js';
+import SelectInteraction from "ol/interaction/Select";
+import { WguEventBus } from "../WguEventBus.js";
+import { OlStyleFactory } from "../factory/OlStyle.js";
+import StyleUtil from "./Style.js";
 
 const MapInteractionUtil = {
-
   /**
    * Create a selectInteraction for a layer
    *
@@ -14,7 +13,7 @@ const MapInteractionUtil = {
    *
    * @returns {ol.interaction.Select} The select interaction
    */
-  createSelectInteraction (layer, selectStyleConf, doAppendSelectStyle) {
+  createSelectInteraction(layer, selectStyleConf, doAppendSelectStyle) {
     let selectClick;
     let selectStyle;
     if (selectStyleConf) {
@@ -28,22 +27,22 @@ const MapInteractionUtil = {
 
       selectClick = new SelectInteraction({
         layers: [layer],
-        style: selectStyle
+        style: selectStyle,
       });
     } else {
       selectClick = new SelectInteraction({
-        layers: [layer]
-      })
+        layers: [layer],
+      });
     }
 
     // necessary for identifying referenced layer
-    selectClick.set('lid', layer.get('lid'));
+    selectClick.set("lid", layer.get("lid"));
 
     // forward an event if feature selection changes
-    selectClick.on('select', function (evt) {
+    selectClick.on("select", function (evt) {
       WguEventBus.$emit(
-        'map-selectionchange',
-        layer.get('lid'),
+        "map-selectionchange",
+        layer.get("lid"),
         evt.selected,
         evt.deselected
       );
@@ -59,7 +58,7 @@ const MapInteractionUtil = {
    * @param {String} layerId The layer id, typically 'lid' the property
    * @returns {ol.interaction.Select} The respective selectInteraction
    */
-  getSelectInteraction (olMap, layerId) {
+  getSelectInteraction(olMap, layerId) {
     if (!olMap || !olMap.getInteractions()) {
       return;
     }
@@ -68,11 +67,13 @@ const MapInteractionUtil = {
       return;
     }
 
-    return interactions.find(interaction => {
-      return interaction instanceof SelectInteraction &&
-            interaction.get('lid') === layerId;
+    return interactions.find((interaction) => {
+      return (
+        interaction instanceof SelectInteraction &&
+        interaction.get("lid") === layerId
+      );
     });
-  }
+  },
 };
 
 export default MapInteractionUtil;

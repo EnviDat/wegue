@@ -1,12 +1,11 @@
-
-import DrawInteraction from 'ol/interaction/Draw';
-import { unByKey } from 'ol/Observable.js';
-import VectorSource from 'ol/source/Vector';
-import VectorLayer from 'ol/layer/Vector';
-import Style from 'ol/style/Style';
-import Stroke from 'ol/style/Stroke';
-import Circle from 'ol/style/Circle';
-import Fill from 'ol/style/Fill';
+import DrawInteraction from "ol/interaction/Draw";
+import { unByKey } from "ol/Observable.js";
+import VectorSource from "ol/source/Vector";
+import VectorLayer from "ol/layer/Vector";
+import Style from "ol/style/Style";
+import Stroke from "ol/style/Stroke";
+import Circle from "ol/style/Circle";
+import Fill from "ol/style/Fill";
 
 /**
  * Class holding the OpenLayers related logic for the measure tool.
@@ -15,7 +14,7 @@ export default class OlMeasureController {
   /* the OL map we want to measure on */
   map = null;
 
-  constructor (olMap, measureConf) {
+  constructor(olMap, measureConf) {
     this.map = olMap;
     this.measureConf = measureConf || {};
     this.measureLayer = undefined;
@@ -24,7 +23,7 @@ export default class OlMeasureController {
   /**
    * Tears down this controller.
    */
-  destroy () {
+  destroy() {
     if (!this.measureLayer || !this.map) {
       return;
     }
@@ -37,24 +36,24 @@ export default class OlMeasureController {
    * Creates a vector layer for the measurement results and adds it to the
    * map.
    */
-  createMeasureLayer () {
+  createMeasureLayer() {
     const me = this;
     const measureConf = me.measureConf;
     // create a vector layer to
     const source = new VectorSource();
     this.measureLayer = new VectorLayer({
-      lid: 'wgu-measure-layer',
+      lid: "wgu-measure-layer",
       displayInLayerList: false,
       source: source,
       style: new Style({
         fill: new Fill({
-          color: measureConf.fillColor || 'rgba(255, 255, 255, 0.2)'
+          color: measureConf.fillColor || "rgba(255, 255, 255, 0.2)",
         }),
         stroke: new Stroke({
-          color: measureConf.strokeColor || 'rgba(0, 0, 0, 0.5)',
-          width: 2
-        })
-      })
+          color: measureConf.strokeColor || "rgba(0, 0, 0, 0.5)",
+          width: 2,
+        }),
+      }),
     });
 
     me.map.addLayer(this.measureLayer);
@@ -66,7 +65,7 @@ export default class OlMeasureController {
   /**
    * Creates and adds the necessary draw interaction and adds it to the map.
    */
-  addInteraction (measureType, mapClickCb) {
+  addInteraction(measureType, mapClickCb) {
     const me = this;
     const measureConf = me.measureConf;
     // cleanup possible old draw interaction
@@ -74,52 +73,61 @@ export default class OlMeasureController {
       me.removeInteraction();
     }
 
-    const type = (measureType === 'area' ? 'Polygon' : 'LineString');
+    const type = measureType === "area" ? "Polygon" : "LineString";
     const draw = new DrawInteraction({
       source: me.source,
       type: type,
       style: new Style({
         fill: new Fill({
-          color: measureConf.sketchFillColor || 'rgba(255, 255, 255, 0.2)'
+          color: measureConf.sketchFillColor || "rgba(255, 255, 255, 0.2)",
         }),
         stroke: new Stroke({
-          color: measureConf.sketchStrokeColor || 'rgba(0, 0, 0, 0.5)',
+          color: measureConf.sketchStrokeColor || "rgba(0, 0, 0, 0.5)",
           lineDash: [10, 10],
-          width: 2
+          width: 2,
         }),
         image: new Circle({
           radius: 5,
           stroke: new Stroke({
-            color: measureConf.sketchVertexStrokeColor || 'rgba(0, 0, 0, 0.7)'
+            color: measureConf.sketchVertexStrokeColor || "rgba(0, 0, 0, 0.7)",
           }),
           fill: new Fill({
-            color: measureConf.sketchVertexFillColor || 'rgba(255, 255, 255, 0.2)'
-          })
-        })
-      })
+            color:
+              measureConf.sketchVertexFillColor || "rgba(255, 255, 255, 0.2)",
+          }),
+        }),
+      }),
     });
     me.map.addInteraction(draw);
 
     let listener;
     let sketch;
-    draw.on('drawstart', (evt) => {
-      // clear old measure features
-      me.source.clear();
-      // preserve sketch
-      sketch = evt.feature;
+    draw.on(
+      "drawstart",
+      (evt) => {
+        // clear old measure features
+        me.source.clear();
+        // preserve sketch
+        sketch = evt.feature;
 
-      listener = me.map.on('click', (evt) => {
-        const geom = sketch.getGeometry();
-        // execute given callback
-        mapClickCb(geom);
-      });
-    }, me);
+        listener = me.map.on("click", (evt) => {
+          const geom = sketch.getGeometry();
+          // execute given callback
+          mapClickCb(geom);
+        });
+      },
+      me
+    );
 
-    draw.on('drawend', () => {
-      // unset sketch
-      sketch = null;
-      unByKey(listener);
-    }, me);
+    draw.on(
+      "drawend",
+      () => {
+        // unset sketch
+        sketch = null;
+        unByKey(listener);
+      },
+      me
+    );
 
     // make draw interaction available as member
     me.draw = draw;
@@ -128,7 +136,7 @@ export default class OlMeasureController {
   /**
    * Removes the current interaction and clears the values.
    */
-  removeInteraction () {
+  removeInteraction() {
     if (this.draw) {
       this.map.removeInteraction(this.draw);
       this.draw = undefined;

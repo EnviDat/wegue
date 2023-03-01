@@ -1,6 +1,6 @@
-import { OverviewMap } from 'ol/control';
-import TileLayer from 'ol/layer/Tile';
-import OSM from 'ol/source/OSM';
+import { OverviewMap } from "ol/control";
+import TileLayer from "ol/layer/Tile";
+import OSM from "ol/source/OSM";
 
 /**
  * Implementation of an OpenLayers based overview map.
@@ -9,7 +9,7 @@ export default class OverviewMapController {
   overviewMapControl = null;
   map = null;
   layer = null;
-  timerHandle = null
+  timerHandle = null;
 
   /**
    * Construction
@@ -17,15 +17,15 @@ export default class OverviewMapController {
    * @param {HTMLElement} target The target container to render the control.
    * @param {Object} config The overview map configuration object.
    */
-  constructor (map, target, config) {
+  constructor(map, target, config) {
     this.map = map;
     this.conf = config || {};
 
     this.overviewMapControl = new OverviewMap({
-      className: 'ol-overviewmap wgu-overviewmap-ctrl',
+      className: "ol-overviewmap wgu-overviewmap-ctrl",
       target: target,
       collapsible: false,
-      rotateWithView: this.conf.rotateWithView
+      rotateWithView: this.conf.rotateWithView,
     });
 
     this.setLayer(null);
@@ -42,12 +42,12 @@ export default class OverviewMapController {
         this.overviewMapControl.render();
       });
     }, 100);
-  };
+  }
 
   /**
    * Unregister the OpenLayers overview map.
    */
-  destroy () {
+  destroy() {
     if (this.timerHandle) {
       clearTimeout(this.timerHandle);
     }
@@ -67,8 +67,10 @@ export default class OverviewMapController {
   /**
    * Applies a vuetify card like style to the inner overview map.
    */
-  setOlStyle () {
-    document.querySelector('.ol-overviewmap-map').classList.add('v-card', 'ma-0');
+  setOlStyle() {
+    document
+      .querySelector(".ol-overviewmap-map")
+      .classList.add("v-card", "ma-0");
   }
 
   /**
@@ -80,15 +82,16 @@ export default class OverviewMapController {
    * For other layer types fallback to an OSM layer.
    * @param {ol.layer.Base} layer The currently displayed layer.
    */
-  setLayer (layer) {
-    this.layer = (layer instanceof TileLayer)
-      ? new TileLayer({
-        extent: layer.getExtent(),
-        source: layer.getSource()
-      })
-      : new TileLayer({
-        source: new OSM()
-      });
+  setLayer(layer) {
+    this.layer =
+      layer instanceof TileLayer
+        ? new TileLayer({
+            extent: layer.getExtent(),
+            source: layer.getSource(),
+          })
+        : new TileLayer({
+            source: new OSM(),
+          });
 
     const overviewMap = this.overviewMapControl.getOverviewMap();
     overviewMap.getLayers().clear();

@@ -1,29 +1,29 @@
-import { mount, shallowMount } from '@vue/test-utils';
-import Vuetify from 'vuetify';
-import BgLayerSwitcher from '@/components/bglayerswitcher/BgLayerSwitcher';
-import OlMap from 'ol/Map';
-import VectorLayer from 'ol/layer/Vector';
-import VectorSource from 'ol/source/Vector';
+import { mount, shallowMount } from "@vue/test-utils";
+import Vuetify from "vuetify";
+import BgLayerSwitcher from "@/components/bglayerswitcher/BgLayerSwitcher";
+import OlMap from "ol/Map";
+import VectorLayer from "ol/layer/Vector";
+import VectorSource from "ol/source/Vector";
 
-describe('bglayerswitcher/BgLayerSwitcher.vue', () => {
+describe("bglayerswitcher/BgLayerSwitcher.vue", () => {
   const vuetify = new Vuetify();
 
-  it('is defined', () => {
-    expect(BgLayerSwitcher).to.not.be.an('undefined');
+  it("is defined", () => {
+    expect(BgLayerSwitcher).to.not.be.an("undefined");
   });
 
-  describe('props', () => {
+  describe("props", () => {
     let comp;
     let vm;
     beforeEach(() => {
       comp = shallowMount(BgLayerSwitcher, {
-        vuetify
+        vuetify,
       });
-      vm = comp.vm
+      vm = comp.vm;
     });
 
-    it('has correct default props', () => {
-      expect(vm.icon).to.equal('map');
+    it("has correct default props", () => {
+      expect(vm.icon).to.equal("map");
       expect(vm.imageWidth).to.equal(152);
       expect(vm.imageHeight).to.equal(114);
     });
@@ -33,19 +33,19 @@ describe('bglayerswitcher/BgLayerSwitcher.vue', () => {
     });
   });
 
-  describe('data', () => {
+  describe("data", () => {
     let comp;
     let vm;
     beforeEach(() => {
       comp = shallowMount(BgLayerSwitcher, {
-        vuetify
+        vuetify,
       });
       vm = comp.vm;
     });
 
-    it('has correct default data', () => {
+    it("has correct default data", () => {
       expect(vm.open).to.equal(false);
-      expect(vm.layers).to.be.an('array');
+      expect(vm.layers).to.be.an("array");
       expect(vm.layers.length).to.eql(0);
     });
 
@@ -54,29 +54,29 @@ describe('bglayerswitcher/BgLayerSwitcher.vue', () => {
     });
   });
 
-  describe('computed properties', () => {
+  describe("computed properties", () => {
     let comp;
     let vm;
     beforeEach(() => {
       comp = shallowMount(BgLayerSwitcher, {
-        vuetify
+        vuetify,
       });
       vm = comp.vm;
     });
 
-    it('only visible when more than one layer', () => {
+    it("only visible when more than one layer", () => {
       const layerIn = new VectorLayer({
         visible: true,
         isBaseLayer: true,
-        source: new VectorSource()
+        source: new VectorSource(),
       });
       const layerOut = new VectorLayer({
         visible: false,
         isBaseLayer: true,
-        source: new VectorSource()
+        source: new VectorSource(),
       });
       const map = new OlMap({
-        layers: [layerIn]
+        layers: [layerIn],
       });
       vm.map = map;
       vm.onMapBound();
@@ -93,7 +93,7 @@ describe('bglayerswitcher/BgLayerSwitcher.vue', () => {
     });
   });
 
-  describe('user interactions', () => {
+  describe("user interactions", () => {
     let comp;
     let vm;
 
@@ -101,27 +101,27 @@ describe('bglayerswitcher/BgLayerSwitcher.vue', () => {
     //  For reasons not fully understood the test utils will fail to attach
     //  the v-menu to the wgu-bglayerswitcher-wrapper div element created
     //  in the component.
-    const div = document.createElement('div');
-    div.id = 'wgu-bglayerswitcher-wrapper';
+    const div = document.createElement("div");
+    div.id = "wgu-bglayerswitcher-wrapper";
     document.body.appendChild(div);
 
     beforeEach(() => {
       comp = mount(BgLayerSwitcher, {
         vuetify,
         computed: {
-          show () {
+          show() {
             return true;
-          }
-        }
+          },
+        },
       });
       vm = comp.vm;
     });
 
-    it('button click switches open', done => {
+    it("button click switches open", (done) => {
       expect(vm.open).to.equal(false);
 
-      const button = comp.findComponent({ name: 'v-btn' });
-      button.trigger('click');
+      const button = comp.findComponent({ name: "v-btn" });
+      button.trigger("click");
 
       vm.$nextTick(() => {
         expect(vm.open).to.equal(true);

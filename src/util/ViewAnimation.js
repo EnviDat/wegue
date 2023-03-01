@@ -1,7 +1,7 @@
-import * as Extent from 'ol/extent';
-import Point from 'ol/geom/Point';
-import Geometry from 'ol/geom/Geometry';
-import Vue from 'vue';
+import * as Extent from "ol/extent";
+import Point from "ol/geom/Point";
+import Geometry from "ol/geom/Geometry";
+import Vue from "vue";
 
 /**
  * A collection of view animations to zoom an OpenLayers view to a given location or extent.
@@ -13,13 +13,13 @@ const ViewAnimationUtil = {
    * @returns The animation object.
    * @private
    */
-  getAnimation () {
+  getAnimation() {
     const animations = {
       none: NoAnimation,
       pan: PanAnimation,
       fly: FlyAnimation,
       bounce: BounceAnimation,
-      default: NoAnimation
+      default: NoAnimation,
     };
 
     const appConfig = Vue.prototype.$appConfig;
@@ -35,7 +35,7 @@ const ViewAnimationUtil = {
    * @returns An object containing the animation configuration.
    * @private
    */
-  getOptions (options) {
+  getOptions(options) {
     const appConfig = Vue.prototype.$appConfig;
     return options || appConfig?.viewAnimation?.options || {};
   },
@@ -48,9 +48,14 @@ const ViewAnimationUtil = {
    * @param {*} completionCallback An optional notification that the animation has completed.
    * @param {*} options Optional configuration object for the animation.
    */
-  to (view, destination, completionCallback, options) {
+  to(view, destination, completionCallback, options) {
     if (destination instanceof Point) {
-      this.toLocation(view, destination.getCoordinates(), completionCallback, options);
+      this.toLocation(
+        view,
+        destination.getCoordinates(),
+        completionCallback,
+        options
+      );
     } else if (destination instanceof Geometry) {
       this.toExtent(view, destination.getExtent(), completionCallback, options);
     } else if (Array.isArray(destination) && destination.length === 2) {
@@ -58,7 +63,7 @@ const ViewAnimationUtil = {
     } else if (Array.isArray(destination) && destination.length === 4) {
       this.toExtent(view, destination, completionCallback, options);
     } else {
-      console.error('Unsupported type for destination.');
+      console.error("Unsupported type for destination.");
     }
   },
 
@@ -69,8 +74,13 @@ const ViewAnimationUtil = {
    * @param {function(complete)} completionCallback An optional notification that the animation has completed.
    * @param {Object} options Optional configuration object for the animation.
    */
-  toLocation (view, location, completionCallback, options) {
-    this.getAnimation().toLocation(view, location, completionCallback, this.getOptions(options));
+  toLocation(view, location, completionCallback, options) {
+    this.getAnimation().toLocation(
+      view,
+      location,
+      completionCallback,
+      this.getOptions(options)
+    );
   },
 
   /**
@@ -80,9 +90,14 @@ const ViewAnimationUtil = {
    * @param {function(complete)} completionCallback An optional notification that the animation has completed.
    * @param {Object} options Optional configuration object for the animation.
    */
-  toExtent (view, extent, completionCallback, options) {
-    this.getAnimation().toExtent(view, extent, completionCallback, this.getOptions(options));
-  }
+  toExtent(view, extent, completionCallback, options) {
+    this.getAnimation().toExtent(
+      view,
+      extent,
+      completionCallback,
+      this.getOptions(options)
+    );
+  },
 };
 
 /**
@@ -99,7 +114,7 @@ const NoAnimation = {
    * * {Number} zoom An optional final zoom level.
    * * {Number} maxZoom An optional maximal zoom level.
    */
-  toLocation (view, location, completionCallback, options) {
+  toLocation(view, location, completionCallback, options) {
     // Set defaults if arguments are not provided.
     const zoom = options.zoom ?? view.getZoom();
     const maxZoom = options.maxZoom ?? Infinity;
@@ -115,7 +130,7 @@ const NoAnimation = {
    * @param {Object} options Configuration object for the animation, supported attributes are:
    * * {Number} maxZoom An optional maximal zoom level.
    */
-  toExtent (view, extent, completionCallback, options) {
+  toExtent(view, extent, completionCallback, options) {
     // Set defaults if arguments are not provided.
     const maxZoom = options.maxZoom ?? Infinity;
 
@@ -135,13 +150,13 @@ const NoAnimation = {
    * @param {Number} zoom The final zoom level.
    * @param {Number} maxZoom The maximal zoom level.
    */
-  animate (view, location, completionCallback, zoom, maxZoom) {
+  animate(view, location, completionCallback, zoom, maxZoom) {
     view.fit(new Point(location), {
       maxZoom: Math.min(zoom, maxZoom),
-      callback: completionCallback
-    })
-  }
-}
+      callback: completionCallback,
+    });
+  },
+};
 
 /**
  * A pan animation.
@@ -160,7 +175,7 @@ const PanAnimation = {
    * * {Number} zoom An optional final zoom level.
    * * {Number} maxZoom An optional maximal zoom level.
    */
-  toLocation (view, location, completionCallback, options) {
+  toLocation(view, location, completionCallback, options) {
     // Set defaults if arguments are not provided.
     const duration = options.duration ?? 3000;
     const zoom = options.zoom ?? view.getZoom();
@@ -178,7 +193,7 @@ const PanAnimation = {
    * * {Number} duration An optional animation duration.
    * * {Number} maxZoom An optional maximal zoom level.
    */
-  toExtent (view, extent, completionCallback, options) {
+  toExtent(view, extent, completionCallback, options) {
     // Set defaults if arguments are not provided.
     const duration = options.duration ?? 3000;
     const maxZoom = options.maxZoom ?? Infinity;
@@ -200,27 +215,29 @@ const PanAnimation = {
    * @param {Number} zoom The final zoom level.
    * @param {Number} maxZoom The maximal zoom level.
    */
-  animate (view, location, completionCallback, duration, zoom, maxZoom) {
-    function callback (complete) {
+  animate(view, location, completionCallback, duration, zoom, maxZoom) {
+    function callback(complete) {
       if (completionCallback) {
         completionCallback(complete);
       }
     }
 
-    view.animate({
-      center: location,
-      duration: duration,
-      zoom: Math.min(zoom, maxZoom)
-    }, callback);
-  }
-}
+    view.animate(
+      {
+        center: location,
+        duration: duration,
+        zoom: Math.min(zoom, maxZoom),
+      },
+      callback
+    );
+  },
+};
 
 /**
  * A fly animation.
  * @private
  */
 const FlyAnimation = {
-
   /**
    * Zoom to the given location by using a "fly" animation.
    * @param {ol.View} view The `ol.View` of the map.
@@ -231,7 +248,7 @@ const FlyAnimation = {
    * * {Number} zoom An optional final zoom level.
    * * {Number} maxZoom An optional maximal zoom level.
    */
-  toLocation (view, location, completionCallback, options) {
+  toLocation(view, location, completionCallback, options) {
     // Set defaults if arguments are not provided.
     const duration = options.duration ?? 3000;
     const zoom = options.zoom ?? view.getZoom();
@@ -243,7 +260,15 @@ const FlyAnimation = {
     const resolutionOut = view.getResolutionForExtent(extentOut);
     const zoomOut = view.getZoomForResolution(resolutionOut) - 1;
 
-    this.animate(view, location, completionCallback, duration, zoomOut, zoom, maxZoom);
+    this.animate(
+      view,
+      location,
+      completionCallback,
+      duration,
+      zoomOut,
+      zoom,
+      maxZoom
+    );
   },
 
   /**
@@ -255,7 +280,7 @@ const FlyAnimation = {
    * * {Number} duration An optional animation duration.
    * * {Number} maxZoom An optional maximal zoom level.
    */
-  toExtent (view, extent, completionCallback, options) {
+  toExtent(view, extent, completionCallback, options) {
     // Set defaults if arguments are not provided.
     const duration = options.duration ?? 3000;
     const maxZoom = options.maxZoom ?? Infinity;
@@ -271,7 +296,15 @@ const FlyAnimation = {
     const zoom = view.getZoomForResolution(resolutionIn) - 0.2;
     const location = Extent.getCenter(extent);
 
-    this.animate(view, location, completionCallback, duration, zoomOut, zoom, maxZoom);
+    this.animate(
+      view,
+      location,
+      completionCallback,
+      duration,
+      zoomOut,
+      zoom,
+      maxZoom
+    );
   },
 
   /**
@@ -285,11 +318,19 @@ const FlyAnimation = {
    * @param {Number} zoom The final zoom level.
    * @param {Number} maxZoom The maximal zoom level.
    */
-  animate (view, location, completionCallback, duration, zoomOut, zoom, maxZoom) {
+  animate(
+    view,
+    location,
+    completionCallback,
+    duration,
+    zoomOut,
+    zoom,
+    maxZoom
+  ) {
     let parts = 2;
     let finished = false;
 
-    function callback (complete) {
+    function callback(complete) {
       --parts;
       if (finished) {
         return;
@@ -302,27 +343,33 @@ const FlyAnimation = {
       }
     }
 
-    view.animate({
-      center: location,
-      duration: duration
-    }, callback);
+    view.animate(
+      {
+        center: location,
+        duration: duration,
+      },
+      callback
+    );
 
-    view.animate({
-      zoom: zoomOut,
-      duration: duration / 2
-    }, {
-      zoom: Math.min(zoom, maxZoom),
-      duration: duration / 2
-    }, callback);
-  }
+    view.animate(
+      {
+        zoom: zoomOut,
+        duration: duration / 2,
+      },
+      {
+        zoom: Math.min(zoom, maxZoom),
+        duration: duration / 2,
+      },
+      callback
+    );
+  },
 };
 
 /**
  * A bounce animation.
  * @private
  */
-const BounceAnimation =
-{
+const BounceAnimation = {
   /**
    * Zoom to the given location by using a "bounce" animation.
    * @param {ol.View} view The `ol.View` of the map.
@@ -333,7 +380,7 @@ const BounceAnimation =
    * * {Number} zoom An optional final zoom level.
    * * {Number} maxZoom An optional maximal zoom level.
    */
-  toLocation (view, location, completionCallback, options) {
+  toLocation(view, location, completionCallback, options) {
     // Set defaults if arguments are not provided.
     const duration = options.duration ?? 3000;
     const zoom = options.zoom ?? view.getZoom();
@@ -351,7 +398,7 @@ const BounceAnimation =
    * * {Number} duration An optional animation duration.
    * * {Number} maxZoom An optional maximal zoom level.
    */
-  toExtent (view, extent, completionCallback, options) {
+  toExtent(view, extent, completionCallback, options) {
     // Set defaults if arguments are not provided.
     const duration = options.duration ?? 3000;
     const maxZoom = options.maxZoom ?? Infinity;
@@ -369,9 +416,10 @@ const BounceAnimation =
    * (from https://github.com/DmitryBaranovskiy/raphael).
    * @private
    */
-  elastic (t) {
-    return Math.pow(2, -10 * t) * Math.sin((t - 0.075) *
-              (2 * Math.PI) / 0.3) + 1;
+  elastic(t) {
+    return (
+      Math.pow(2, -10 * t) * Math.sin(((t - 0.075) * (2 * Math.PI)) / 0.3) + 1
+    );
   },
 
   /**
@@ -384,11 +432,11 @@ const BounceAnimation =
    * @param {Number} zoom The final zoom level.
    * @param {Number} maxZoom The maximal zoom level.
    */
-  animate (view, location, completionCallback, duration, zoom, maxZoom) {
+  animate(view, location, completionCallback, duration, zoom, maxZoom) {
     let parts = 2;
     let finished = false;
 
-    function callback (complete) {
+    function callback(complete) {
       --parts;
       if (finished) {
         return;
@@ -401,17 +449,23 @@ const BounceAnimation =
       }
     }
 
-    view.animate({
-      center: location,
-      duration: duration,
-      easing: this.elastic
-    }, callback);
+    view.animate(
+      {
+        center: location,
+        duration: duration,
+        easing: this.elastic,
+      },
+      callback
+    );
 
-    view.animate({
-      zoom: Math.min(zoom, maxZoom),
-      duration: duration
-    }, callback);
-  }
+    view.animate(
+      {
+        zoom: Math.min(zoom, maxZoom),
+        duration: duration,
+      },
+      callback
+    );
+  },
 };
 
 export default ViewAnimationUtil;

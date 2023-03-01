@@ -1,48 +1,48 @@
-import ColorUtil from './Color'
+import ColorUtil from "./Color";
 
 // Macro for default color themes configuration
 const DEFAULT_THEMES = Object.freeze({
   light: {
-    primary: '#af2622',
-    onprimary: '#ffffff',
-    secondary: '#af2622',
-    onsecondary: '#ffffff',
-    anchor: '#af2622',
-    error: '#ff6f00'
+    primary: "#af2622",
+    onprimary: "#ffffff",
+    secondary: "#af2622",
+    onsecondary: "#ffffff",
+    anchor: "#af2622",
+    error: "#ff6f00",
   },
   dark: {
-    primary: '#272727',
-    onprimary: '#ffffff',
-    secondary: '#ea9b9b',
-    onsecondary: '#272727',
-    anchor: '#ea9b9b',
-    error: '#ff6f00'
-  }
+    primary: "#272727",
+    onprimary: "#ffffff",
+    secondary: "#ea9b9b",
+    onsecondary: "#272727",
+    anchor: "#ea9b9b",
+    error: "#ff6f00",
+  },
 });
 
 // Macros for light/dark theme
-const LIGHT_WHITE = '#ffffff';
-const LIGHT_ERROR = '#FF5252';
-const LIGHT_INFO = '#2196F3';
-const LIGHT_SUCCESS = '#4CAF50';
-const LIGHT_WARNING = '#FFC107';
-const LIGHT_BLACK = '#000000';
-const DARK_WHITE = '#ffffff';
-const DARK_ERROR = '#FF5252';
-const DARK_INFO = '#2196F3';
-const DARK_SUCCESS = '#4CAF50';
-const DARK_WARNING = '#FFC107';
-const DARK_BLACK = '#272727';
+const LIGHT_WHITE = "#ffffff";
+const LIGHT_ERROR = "#FF5252";
+const LIGHT_INFO = "#2196F3";
+const LIGHT_SUCCESS = "#4CAF50";
+const LIGHT_WARNING = "#FFC107";
+const LIGHT_BLACK = "#000000";
+const DARK_WHITE = "#ffffff";
+const DARK_ERROR = "#FF5252";
+const DARK_INFO = "#2196F3";
+const DARK_SUCCESS = "#4CAF50";
+const DARK_WARNING = "#FFC107";
+const DARK_BLACK = "#272727";
 
 /**
-   * Gets the base color for the input color.
-   * See the theme object interface on
-   * https://vuetifyjs.com/en/features/theme/#custom-theme-variants
-   * @param {String | Object} color hexadecimal/object color
-   * @returns {String} base color
-   */
-function getBaseColor (color) {
-  return typeof color === 'object' ? color.base : color;
+ * Gets the base color for the input color.
+ * See the theme object interface on
+ * https://vuetifyjs.com/en/features/theme/#custom-theme-variants
+ * @param {String | Object} color hexadecimal/object color
+ * @returns {String} base color
+ */
+function getBaseColor(color) {
+  return typeof color === "object" ? color.base : color;
 }
 
 /**
@@ -54,7 +54,7 @@ function getBaseColor (color) {
  * @param {String} dark hexadecimal color
  * @returns {String} contrast color
  */
-function contrastColor (color, light, dark) {
+function contrastColor(color, light, dark) {
   const baseColor = getBaseColor(color);
 
   return ColorUtil.checkLuminance(baseColor) ? light : dark;
@@ -70,13 +70,13 @@ const ColorThemeUtil = {
    * @param {Object} defaultTheme default Wegue theme
    * @returns {Object} merged color theme
    */
-  mergeThemes (inputTheme, defaultTheme) {
+  mergeThemes(inputTheme, defaultTheme) {
     let { light, dark } = inputTheme;
 
     const merged = {
       light: {},
-      dark: {}
-    }
+      dark: {},
+    };
 
     // If light theme is configured with at least the primary color
     if (!light || !light.primary) {
@@ -92,18 +92,26 @@ const ColorThemeUtil = {
     merged.light.secondary = light.secondary ? light.secondary : light.primary;
 
     // set accent to the light theme white
-    merged.light.accent = contrastColor(merged.light.primary, LIGHT_WHITE, LIGHT_BLACK);
+    merged.light.accent = contrastColor(
+      merged.light.primary,
+      LIGHT_WHITE,
+      LIGHT_BLACK
+    );
 
     // set anchor to the light theme secondary
     merged.light.anchor = merged.light.secondary;
 
     // set onprimary to user onprimary,
     // otherwise fallback to a color that contrasts with the primary
-    merged.light.onprimary = light.onprimary ? light.onprimary : contrastColor(merged.light.primary, LIGHT_WHITE, LIGHT_BLACK);
+    merged.light.onprimary = light.onprimary
+      ? light.onprimary
+      : contrastColor(merged.light.primary, LIGHT_WHITE, LIGHT_BLACK);
 
     // set onprimary to user onsecondary,
     // otherwise fallback to a color that contrasts with the secondary
-    merged.light.onsecondary = light.onsecondary ? light.onsecondary : contrastColor(merged.light.secondary, LIGHT_WHITE, LIGHT_BLACK);
+    merged.light.onsecondary = light.onsecondary
+      ? light.onsecondary
+      : contrastColor(merged.light.secondary, LIGHT_WHITE, LIGHT_BLACK);
 
     // set semantic colors,
     // otherwise fallback to light theme defaults
@@ -135,7 +143,9 @@ const ColorThemeUtil = {
 
     // set onsecondary to user onsecondary,
     // otherwise fallback to a color that contrasts with secondary
-    merged.dark.onsecondary = dark.onsecondary ? dark.onsecondary : contrastColor(merged.dark.secondary, DARK_WHITE, DARK_BLACK);
+    merged.dark.onsecondary = dark.onsecondary
+      ? dark.onsecondary
+      : contrastColor(merged.dark.secondary, DARK_WHITE, DARK_BLACK);
 
     // set semantic colors,
     // otherwise fallback to dark theme defaults
@@ -154,12 +164,12 @@ const ColorThemeUtil = {
    */
   buildTheme: function (inputConfig) {
     // If there is no input config, create it
-    if (!inputConfig || typeof inputConfig !== 'object') {
+    if (!inputConfig || typeof inputConfig !== "object") {
       inputConfig = { dark: false };
     }
 
     // If there is no input themes, create it
-    if (!inputConfig.themes || typeof inputConfig.themes !== 'object') {
+    if (!inputConfig.themes || typeof inputConfig.themes !== "object") {
       inputConfig.themes = {};
     }
 
@@ -170,16 +180,19 @@ const ColorThemeUtil = {
     outputConfig.dark = !!inputConfig.dark;
 
     // Apply user theme or fallback to default
-    outputConfig.themes = ColorThemeUtil.mergeThemes(inputConfig.themes, DEFAULT_THEMES);
+    outputConfig.themes = ColorThemeUtil.mergeThemes(
+      inputConfig.themes,
+      DEFAULT_THEMES
+    );
 
     // Set customProperties.
     // This creates css colors for each vuetify color class
     outputConfig.options = {
-      customProperties: true
-    }
+      customProperties: true,
+    };
 
     return outputConfig;
-  }
-}
+  },
+};
 
 export default ColorThemeUtil;

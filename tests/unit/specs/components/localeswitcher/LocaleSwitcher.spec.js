@@ -1,23 +1,23 @@
-import Vue from 'vue'
-import { mount, shallowMount } from '@vue/test-utils';
-import LocaleSwitcher from '@/components/localeswitcher/LocaleSwitcher';
+import Vue from "vue";
+import { mount, shallowMount } from "@vue/test-utils";
+import LocaleSwitcher from "@/components/localeswitcher/LocaleSwitcher";
 
 const appConfig = {
   lang: {
     supported: {
-      en: 'English',
-      de: 'Deutsch'
+      en: "English",
+      de: "Deutsch",
     },
-    fallback: 'de'
-  }
+    fallback: "de",
+  },
 };
 
-describe('localeswitcher/LocaleSwitcher.vue', () => {
-  it('is defined', () => {
-    expect(LocaleSwitcher).to.not.be.an('undefined');
+describe("localeswitcher/LocaleSwitcher.vue", () => {
+  it("is defined", () => {
+    expect(LocaleSwitcher).to.not.be.an("undefined");
   });
 
-  describe('props', () => {
+  describe("props", () => {
     let comp;
     let vm;
     beforeEach(() => {
@@ -25,8 +25,8 @@ describe('localeswitcher/LocaleSwitcher.vue', () => {
       vm = comp.vm;
     });
 
-    it('has correct default props', () => {
-      expect(vm.icon).to.equal('language');
+    it("has correct default props", () => {
+      expect(vm.icon).to.equal("language");
     });
 
     afterEach(() => {
@@ -34,7 +34,7 @@ describe('localeswitcher/LocaleSwitcher.vue', () => {
     });
   });
 
-  describe('data', () => {
+  describe("data", () => {
     let comp;
     let vm;
     beforeEach(() => {
@@ -43,12 +43,12 @@ describe('localeswitcher/LocaleSwitcher.vue', () => {
       vm = comp.vm;
     });
 
-    it('has correct default data', () => {
-      expect(typeof LocaleSwitcher.data).to.equal('function');
-      expect(vm.lang).to.be.an('object');
+    it("has correct default data", () => {
+      expect(typeof LocaleSwitcher.data).to.equal("function");
+      expect(vm.lang).to.be.an("object");
       expect(Object.keys(vm.lang).length).to.eql(2);
-      expect(vm.lang.en).to.eql('English');
-      expect(vm.lang.de).to.eql('Deutsch');
+      expect(vm.lang.en).to.eql("English");
+      expect(vm.lang.de).to.eql("Deutsch");
     });
 
     afterEach(() => {
@@ -56,31 +56,31 @@ describe('localeswitcher/LocaleSwitcher.vue', () => {
     });
   });
 
-  describe('methods', () => {
+  describe("methods", () => {
     let comp;
     let vm;
     beforeEach(() => {
       Vue.prototype.$appConfig = appConfig;
       comp = mount(LocaleSwitcher, {
-        created () {
-          this.$vuetify.lang = { current: 'en' };
-        }
+        created() {
+          this.$vuetify.lang = { current: "en" };
+        },
       });
       vm = comp.vm;
     });
 
-    it('are implemented', () => {
-      expect(typeof vm.onItemClick).to.equal('function');
+    it("are implemented", () => {
+      expect(typeof vm.onItemClick).to.equal("function");
     });
 
-    it('onItemClick toggles language', () => {
-      vm.onItemClick('de');
-      expect(vm.$i18n.locale).to.equal('de');
-      expect(vm.$vuetify.lang.current).to.equal('de');
+    it("onItemClick toggles language", () => {
+      vm.onItemClick("de");
+      expect(vm.$i18n.locale).to.equal("de");
+      expect(vm.$vuetify.lang.current).to.equal("de");
 
-      vm.onItemClick('en');
-      expect(vm.$i18n.locale).to.equal('en');
-      expect(vm.$vuetify.lang.current).to.equal('en');
+      vm.onItemClick("en");
+      expect(vm.$i18n.locale).to.equal("en");
+      expect(vm.$vuetify.lang.current).to.equal("en");
     });
 
     afterEach(() => {

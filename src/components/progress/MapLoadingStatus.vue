@@ -1,40 +1,39 @@
 <template>
-
   <v-progress-circular
     v-if="visible"
     class="wgu-maploading-status"
     :value="80"
     indeterminate
     color="secondary"
-    >
+  >
   </v-progress-circular>
-
 </template>
 
 <script>
-
-import { Mapable } from '../../mixins/Mapable';
+import { Mapable } from "../../mixins/Mapable";
 import {
-  Image as ImageSource, TileImage as TileImageSource,
-  Vector as VectorSource, Cluster as ClusterSource
-} from 'ol/source';
-import LayerGroup from 'ol/layer/Group';
+  Image as ImageSource,
+  TileImage as TileImageSource,
+  Vector as VectorSource,
+  Cluster as ClusterSource,
+} from "ol/source";
+import LayerGroup from "ol/layer/Group";
 
 export default {
-  name: 'wgu-maploading-status',
+  name: "wgu-maploading-status",
   mixins: [Mapable],
-  data () {
+  data() {
     return {
       loading: 0,
-      visible: false
-    }
+      visible: false,
+    };
   },
   methods: {
     /**
      * This function is executed, after the map is bound (see mixins/Mapable)
      * and registers the current map layers.
      */
-    onMapBound () {
+    onMapBound() {
       const me = this;
       me.registerLayers(me.map.getLayerGroup());
     },
@@ -45,7 +44,7 @@ export default {
      *
      * @param  {ol/layer/Base | ol/layer/Group} layer Layer or group to register
      */
-    registerLayers (layer) {
+    registerLayers(layer) {
       const me = this;
 
       if (layer instanceof LayerGroup) {
@@ -55,13 +54,13 @@ export default {
           me.registerLayers(child);
         });
         // handle future changes to this group or stop doing so
-        layers.on('add', me.onLayerAddedToGroup, me);
-        layers.on('remove', me.onLayerRemovedFromGroup, me);
+        layers.on("add", me.onLayerAddedToGroup, me);
+        layers.on("remove", me.onLayerRemovedFromGroup, me);
       } else {
         const source = layer.getSource();
         me.bindLoadHandlers(source, true);
         // reacting on a changed source in a layer
-        layer.on('change:source', function (evt) {
+        layer.on("change:source", function (evt) {
           me.bindLoadHandlers(evt.target.getSource(), true);
           me.bindLoadHandlers(evt.oldValue, false);
         });
@@ -74,28 +73,28 @@ export default {
      *
      * @param  {ol/source/Source} source The layer source to register
      */
-    bindLoadHandlers (source, register) {
+    bindLoadHandlers(source, register) {
       const me = this;
-      let eventPrefix = '';
-      const method = register ? 'on' : 'un';
+      let eventPrefix = "";
+      const method = register ? "on" : "un";
 
       if (source instanceof ImageSource) {
         // includes ImageWms, also e.g. ImageArcGISRest, OSM …
-        eventPrefix = 'image';
+        eventPrefix = "image";
       } else if (source instanceof TileImageSource) {
         // includes TileWMS, Bing and more
-        eventPrefix = 'tile';
+        eventPrefix = "tile";
       } else if (source instanceof VectorSource) {
         if (source instanceof ClusterSource) {
           source = source.getSource();
         }
-        eventPrefix = 'vector';
+        eventPrefix = "vector";
       }
 
       if (eventPrefix) {
-        source[method](eventPrefix + 'loadstart', me.incrementLoading, me);
-        source[method](eventPrefix + 'loadend', me.decrementLoading, me);
-        source[method](eventPrefix + 'loaderror', me.decrementLoading, me);
+        source[method](eventPrefix + "loadstart", me.incrementLoading, me);
+        source[method](eventPrefix + "loadend", me.decrementLoading, me);
+        source[method](eventPrefix + "loaderror", me.decrementLoading, me);
       }
     },
 
@@ -103,7 +102,7 @@ export default {
      * Called whenever loading of a layer starts.
      * This will increment the internal counter and show this loading indicator.
      */
-    incrementLoading () {
+    incrementLoading() {
       const me = this;
       me.loading++;
       me.visible = true;
@@ -114,7 +113,7 @@ export default {
      * This will decrement the internal counter and if nothing is currently
      * loading the counter is reset and the loading indicator is hidden.
      */
-    decrementLoading () {
+    decrementLoading() {
       const me = this;
       me.loading--;
 
@@ -127,7 +126,7 @@ export default {
     /**
      * Helper method to reset the internal loading counter.
      */
-    resetLoading () {
+    resetLoading() {
       this.loading = 0;
     },
 
@@ -149,19 +148,17 @@ export default {
      */
     onLayerRemovedFromGroup: function (evt) {
       this.registerLayers(evt.element);
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-
-  .v-progress-circular.wgu-maploading-status {
-    position: fixed;
-    bottom: 5em;
-    right: 4em;
-    z-index: 1;
-  }
-
+.v-progress-circular.wgu-maploading-status {
+  position: fixed;
+  bottom: 5em;
+  right: 4em;
+  z-index: 1;
+}
 </style>

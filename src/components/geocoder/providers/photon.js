@@ -31,19 +31,19 @@ export class Photon {
   /**
    * @constructor
    */
-  constructor () {
+  constructor() {
     this.settings = {
-      url: 'https://photon.komoot.de/api/',
+      url: "https://photon.komoot.de/api/",
       params: {
-        q: '',
+        q: "",
         limit: 10,
-        lang: 'en'
+        lang: "en",
       },
-      langs: ['de', 'it', 'fr', 'en']
+      langs: ["de", "it", "fr", "en"],
     };
   }
 
-  getParameters (options) {
+  getParameters(options) {
     options.lang = options.lang.toLowerCase();
 
     return {
@@ -54,32 +54,34 @@ export class Photon {
         lang:
           this.settings.langs.indexOf(options.lang) > -1
             ? options.lang
-            : this.settings.params.lang
-      }
+            : this.settings.params.lang,
+      },
     };
   }
 
-  handleResponse (results) {
+  handleResponse(results) {
     if (!results.features.length) return;
     return results.features.map(function (feature) {
       // Response is GeoJSON
       const geometry = feature.geometry;
       const properties = feature.properties;
-      const displayName = `${properties.name} ${properties.city || ''} ${properties.postcode || ''} ${properties.state || ''} ${properties.country || ''}`;
+      const displayName = `${properties.name} ${properties.city || ""} ${
+        properties.postcode || ""
+      } ${properties.state || ""} ${properties.country || ""}`;
       const result = {
         lon: geometry.coordinates[0],
         lat: geometry.coordinates[1],
         address: {
           name: displayName,
-          postcode: properties.postcode || '',
-          city: properties.city || '',
-          state: properties.state || '',
-          country: properties.country || ''
+          postcode: properties.postcode || "",
+          city: properties.city || "",
+          state: properties.state || "",
+          country: properties.country || "",
         },
         original: {
           formatted: displayName,
-          details: properties
-        }
+          details: properties,
+        },
       };
       // Sometimes has bbox
       if (properties.extent) {

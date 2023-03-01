@@ -10,7 +10,7 @@
       <v-toolbar v-bind="toolbarAttr">
         <v-icon color="onprimary" class="mr-4">{{ icon }}</v-icon>
         <v-toolbar-title class="wgu-win-title">{{
-          $t(moduleName + '.title')
+          $t(moduleName + ".title")
         }}</v-toolbar-title>
         <v-spacer></v-spacer>
 
@@ -49,19 +49,19 @@
 </template>
 
 <script>
-import { DraggableWin } from '../../directives/DraggableWin';
-import { WguEventBus } from '../../WguEventBus';
+import { DraggableWin } from "../../directives/DraggableWin";
+import { WguEventBus } from "../../WguEventBus";
 export default {
-  name: 'wgu-module-card',
+  name: "wgu-module-card",
   inheritAttrs: false,
   directives: {
-    DraggableWin
+    DraggableWin,
   },
   props: {
     // Common properties
     moduleName: { type: String, required: true },
     icon: { type: String, required: true },
-    win: { type: String, required: false, default: 'floating' },
+    win: { type: String, required: false, default: "floating" },
     minimizable: { type: Boolean, required: false, default: false },
     closable: { type: Boolean, required: false, default: true },
     backgroundImage: { type: String, required: false, default: undefined },
@@ -74,71 +74,71 @@ export default {
     maxHeight: { type: [Number, String], required: false, default: undefined },
     maxWidth: { type: [Number, String], required: false, default: undefined },
     minHeight: { type: [Number, String], required: false, default: undefined },
-    minWidth: { type: [Number, String], required: false, default: undefined }
+    minWidth: { type: [Number, String], required: false, default: undefined },
   },
-  data () {
+  data() {
     return {
       show: this.visible,
-      minimized: false
+      minimized: false,
     };
   },
-  created () {
-    WguEventBus.$on(this.moduleName + '-visibility-change', (visible) => {
+  created() {
+    WguEventBus.$on(this.moduleName + "-visibility-change", (visible) => {
       this.show = visible;
-      this.$emit('visibility-change', visible);
+      this.$emit("visibility-change", visible);
     });
   },
-  updated () {
-    if (this.show && this.win === 'sidebar') {
-      WguEventBus.$emit('sidebar-scroll', this);
+  updated() {
+    if (this.show && this.win === "sidebar") {
+      WguEventBus.$emit("sidebar-scroll", this);
     }
   },
   computed: {
-    cardClasses () {
-      return this.win === 'floating'
-        ? ['wgu-module-card', 'wgu-floating']
-        : ['wgu-module-card', 'wgu-sidebar'];
+    cardClasses() {
+      return this.win === "floating"
+        ? ["wgu-module-card", "wgu-floating"]
+        : ["wgu-module-card", "wgu-sidebar"];
     },
-    cardStyles () {
-      return this.win === 'floating'
+    cardStyles() {
+      return this.win === "floating"
         ? {
-            left: this.initPos ? this.initPos.left + 'px' : '0px',
-            top: this.initPos ? this.initPos.top + 'px' : '0px'
+            left: this.initPos ? this.initPos.left + "px" : "0px",
+            top: this.initPos ? this.initPos.top + "px" : "0px",
           }
         : {};
     },
-    cardAttr () {
-      return this.win === 'floating'
+    cardAttr() {
+      return this.win === "floating"
         ? {
             height: this.height,
             width: this.width,
             maxHeight: this.maxHeight,
             maxWidth: this.maxWidth,
             minHeight: this.minHeight,
-            minWidth: this.minWidth
+            minWidth: this.minWidth,
           }
         : {};
     },
-    cardDraggable () {
-      return this.win === 'floating' ? this.draggable : false;
+    cardDraggable() {
+      return this.win === "floating" ? this.draggable : false;
     },
-    toolbarAttr () {
+    toolbarAttr() {
       return this.backgroundImage
         ? {
             dark: true,
             flat: true,
-            color: 'transparent'
+            color: "transparent",
           }
         : {
-            color: 'primary',
-            class: 'onprimary--text'
+            color: "primary",
+            class: "onprimary--text",
           };
-    }
+    },
   },
   methods: {
-    toggleUi () {
-      WguEventBus.$emit(this.moduleName + '-visibility-change', !this.show);
-    }
-  }
+    toggleUi() {
+      WguEventBus.$emit(this.moduleName + "-visibility-change", !this.show);
+    },
+  },
 };
 </script>

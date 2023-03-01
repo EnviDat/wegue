@@ -1,69 +1,74 @@
 <template>
-  <wgu-module-card v-bind="$attrs"
-      :moduleName="moduleName"
-      class="wgu-maprecorder-win"
-      :icon="icon"
-      width=350>
-
-    <v-expansion-panels :multiple="true" :accordion="true" class="overflow-y-auto">
+  <wgu-module-card
+    v-bind="$attrs"
+    :moduleName="moduleName"
+    class="wgu-maprecorder-win"
+    :icon="icon"
+    width="350"
+  >
+    <v-expansion-panels
+      :multiple="true"
+      :accordion="true"
+      class="overflow-y-auto"
+    >
       <v-expansion-panel>
         <v-expansion-panel-header>
           <v-layout align-center>
             <v-icon class="mr-4">settings</v-icon>
-            {{ $t('wgu-maprecorder.options') }}
+            {{ $t("wgu-maprecorder.options") }}
           </v-layout>
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <v-card
-            flat
-            color="transparent"
-          >
-          <v-subheader>{{ $t('wgu-maprecorder.videoFormat') }}</v-subheader>
+          <v-card flat color="transparent">
+            <v-subheader>{{ $t("wgu-maprecorder.videoFormat") }}</v-subheader>
             <v-card-text class="pt-0">
               <v-select
-                  color="secondary"
-                  item-color="secondary"
-                  :menu-props="{
-                    'offset-y': true,
-                    bottom: true,
-                  }"
-                  v-model="mimeType"
-                  :items="mimeTypes"
-                  prepend-icon="mdi-video-image"
-                  dense
-                  hide-details>
+                color="secondary"
+                item-color="secondary"
+                :menu-props="{
+                  'offset-y': true,
+                  bottom: true,
+                }"
+                v-model="mimeType"
+                :items="mimeTypes"
+                prepend-icon="mdi-video-image"
+                dense
+                hide-details
+              >
               </v-select>
             </v-card-text>
 
-            <v-subheader>{{ $t('wgu-maprecorder.frameRate') }}</v-subheader>
+            <v-subheader>{{ $t("wgu-maprecorder.frameRate") }}</v-subheader>
             <v-card-text class="pt-0">
               <v-slider
-                  color="secondary"
-                  prepend-icon="mdi-iframe-variable-outline"
-                  v-model.number="frameRate"
-                  min="20"
-                  max="50"
-                  step="1"
-                  thumb-label
-                  hide-details>
+                color="secondary"
+                prepend-icon="mdi-iframe-variable-outline"
+                v-model.number="frameRate"
+                min="20"
+                max="50"
+                step="1"
+                thumb-label
+                hide-details
+              >
               </v-slider>
             </v-card-text>
 
-            <v-subheader>{{ $t('wgu-maprecorder.bitRate') }}</v-subheader>
+            <v-subheader>{{ $t("wgu-maprecorder.bitRate") }}</v-subheader>
             <v-card-text class="pt-0">
               <v-slider
-                  color="secondary"
-                  prepend-icon="mdi-quality-high"
-                  v-model.number="videoMBitsPerSecond"
-                  min="1.0"
-                  max="10.0"
-                  step="0.1"
-                  thumb-label
-                  hide-details>
+                color="secondary"
+                prepend-icon="mdi-quality-high"
+                v-model.number="videoMBitsPerSecond"
+                min="1.0"
+                max="10.0"
+                step="0.1"
+                thumb-label
+                hide-details
+              >
               </v-slider>
             </v-card-text>
 
-            <v-subheader>{{ $t('wgu-maprecorder.fileName') }}</v-subheader>
+            <v-subheader>{{ $t("wgu-maprecorder.fileName") }}</v-subheader>
             <v-card-text class="pt-0">
               <v-text-field
                 color="secondary"
@@ -81,27 +86,22 @@
     </v-expansion-panels>
 
     <v-card-actions class="pb-5">
-      <v-row
-        align-center
-        justify-center
-        no-gutters
-        class="px-3"
-      >
+      <v-row align-center justify-center no-gutters class="px-3">
         <v-btn
           :block="!recording"
           :class="{
-            'secondary': true,
-            'onsecondary--text': true
+            secondary: true,
+            'onsecondary--text': true,
           }"
           @click="toggleRecord"
         >
           <template v-if="!recording">
             <v-icon left>fiber_manual_record</v-icon>
-            {{ $t('wgu-maprecorder.start') }}
+            {{ $t("wgu-maprecorder.start") }}
           </template>
           <template v-else>
             <v-icon left>stop</v-icon>
-            {{ $t('wgu-maprecorder.stop') }}
+            {{ $t("wgu-maprecorder.stop") }}
           </template>
         </v-btn>
 
@@ -123,34 +123,34 @@
             transition="scroll-y-transition"
             class="mt-2 mb-0"
           >
-            {{ $t('wgu-maprecorder.error') }}
+            {{ $t("wgu-maprecorder.error") }}
           </v-alert>
-         </v-col>
+        </v-col>
       </v-row>
     </v-card-actions>
   </wgu-module-card>
 </template>
 
 <script>
-import ModuleCard from './../modulecore/ModuleCard';
-import { Mapable } from '../../mixins/Mapable';
-import createCanvasRecorder from 'canvas-record';
+import ModuleCard from "./../modulecore/ModuleCard";
+import { Mapable } from "../../mixins/Mapable";
+import createCanvasRecorder from "canvas-record";
 
 export default {
-  name: 'wgu-maprecorder-win',
+  name: "wgu-maprecorder-win",
   inheritAttrs: false,
   mixins: [Mapable],
   components: {
-    'wgu-module-card': ModuleCard
+    "wgu-module-card": ModuleCard,
   },
   props: {
-    icon: { type: String, required: false, default: 'mdi-video' }
+    icon: { type: String, required: false, default: "mdi-video" },
   },
-  data () {
+  data() {
     const mimeTypes = this.getSupportedMimeTypes();
 
     return {
-      moduleName: 'wgu-maprecorder',
+      moduleName: "wgu-maprecorder",
 
       /**
        * Custom canvas element for drawing the OpenLayers map.
@@ -195,8 +195,8 @@ export default {
       /**
        * An error occured on recording.
        */
-      error: false
-    }
+      error: false,
+    };
   },
   methods: {
     /**
@@ -205,24 +205,26 @@ export default {
      * layers, code is taken from this example:
      * https://openlayers.org/en/latest/examples/export-map.html
      */
-    drawCanvas () {
+    drawCanvas() {
       const me = this;
-      me.mapContext.fillStyle = 'white';
+      me.mapContext.fillStyle = "white";
       me.mapContext.fillRect(0, 0, me.mapCanvas.width, me.mapCanvas.height);
 
       Array.prototype.forEach.call(
-        document.querySelectorAll('.ol-layer canvas'),
+        document.querySelectorAll(".ol-layer canvas"),
         function (canvas) {
           if (canvas.width > 0) {
             const opacity = canvas.parentNode.style.opacity;
-            me.mapContext.globalAlpha = opacity === '' ? 1 : Number(opacity);
+            me.mapContext.globalAlpha = opacity === "" ? 1 : Number(opacity);
 
             // Get the transform parameters from the style's transform matrix
             // and apply the transform to the export map context.
             const transform = canvas.style.transform;
             /* eslint-disable-next-line no-useless-escape */
-            const matrix = transform.match(/^matrix\(([^\(]*)\)$/)[1]
-              .split(',').map(Number);
+            const matrix = transform
+              .match(/^matrix\(([^\(]*)\)$/)[1]
+              .split(",")
+              .map(Number);
             CanvasRenderingContext2D.prototype.setTransform.apply(
               me.mapContext,
               matrix
@@ -236,7 +238,7 @@ export default {
     /**
      * Starts / stops recording
      */
-    toggleRecord () {
+    toggleRecord() {
       const me = this;
       if (me.recording) {
         me.stopRecording();
@@ -249,7 +251,7 @@ export default {
      * Resize the canvas when the map changes. Only happens when recording
      * is active.
      */
-    mapSizeChanged () {
+    mapSizeChanged() {
       const me = this;
       const size = me.map.getSize();
       me.mapCanvas.width = size[0];
@@ -260,13 +262,13 @@ export default {
      * Create a custom canvas to render into, a map recorder and start the
      * capturing process.
      */
-    startRecording () {
+    startRecording() {
       const me = this;
-      me.mapCanvas = document.createElement('canvas');
+      me.mapCanvas = document.createElement("canvas");
       me.mapSizeChanged();
-      me.mapContext = me.mapCanvas.getContext('2d');
+      me.mapContext = me.mapCanvas.getContext("2d");
       me.drawCanvas();
-      me.map.on('change:size', me.mapSizeChanged);
+      me.map.on("change:size", me.mapSizeChanged);
       me.timerHandle = setInterval(me.drawCanvas, 1000 / me.frameRate);
 
       try {
@@ -275,8 +277,8 @@ export default {
           frameRate: me.frameRate,
           recorderOptions: {
             videoBitsPerSecond: me.videoMBitsPerSecond * 1048576,
-            mimeType: me.mimeType
-          }
+            mimeType: me.mimeType,
+          },
         });
         me.recorder.start();
       } catch (e) {
@@ -292,7 +294,7 @@ export default {
     /**
      * Stop recording and free all associated resources.
      */
-    stopRecording () {
+    stopRecording() {
       const me = this;
       if (me.recorder) {
         me.recorder.stop();
@@ -301,7 +303,7 @@ export default {
       }
       clearInterval(me.timerHandle);
       me.timerHandle = null;
-      me.map.un('change:size', me.mapSizeChanged)
+      me.map.un("change:size", me.mapSizeChanged);
       me.mapContext = me.mapCanvas = null;
       me.recording = false;
     },
@@ -310,16 +312,16 @@ export default {
      * Returns video codecs supported by the browser. See
      * https://developer.mozilla.org/en-US/docs/Web/Media/Formats/Containers
      */
-    getSupportedMimeTypes () {
+    getSupportedMimeTypes() {
       return [
-        'video/webm',
-        'video/mp4',
-        'video/ogg',
-        'video/x-matroska',
-        'video/quicktime',
-        'video/3gpp'
-      ].filter(mimeType => MediaRecorder.isTypeSupported(mimeType));
-    }
-  }
+        "video/webm",
+        "video/mp4",
+        "video/ogg",
+        "video/x-matroska",
+        "video/quicktime",
+        "video/3gpp",
+      ].filter((mimeType) => MediaRecorder.isTypeSupported(mimeType));
+    },
+  },
 };
 </script>

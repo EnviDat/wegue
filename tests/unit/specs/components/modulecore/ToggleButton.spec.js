@@ -1,36 +1,36 @@
-import { shallowMount } from '@vue/test-utils';
-import ToggleButton from '@/components/modulecore/ToggleButton'
+import { shallowMount } from "@vue/test-utils";
+import ToggleButton from "@/components/modulecore/ToggleButton";
 
 const buttonProps = {
-  moduleName: 'my-module',
-  icon: 'my-icon'
-}
+  moduleName: "my-module",
+  icon: "my-icon",
+};
 
-describe('modulecore/ToggleButton.vue', () => {
+describe("modulecore/ToggleButton.vue", () => {
   // Inspect the raw component options
-  it('is defined', () => {
-    expect(ToggleButton).to.not.be.an('undefined');
+  it("is defined", () => {
+    expect(ToggleButton).to.not.be.an("undefined");
   });
 
-  it('has a created hook', () => {
-    expect(ToggleButton.created).to.be.a('function');
+  it("has a created hook", () => {
+    expect(ToggleButton.created).to.be.a("function");
   });
 
-  describe('props', () => {
+  describe("props", () => {
     let comp;
     beforeEach(() => {
       comp = shallowMount(ToggleButton, {
-        propsData: buttonProps
+        propsData: buttonProps,
       });
     });
 
-    it('has correct default props', () => {
+    it("has correct default props", () => {
       expect(comp.vm.visible).to.equal(false);
     });
 
-    it('has correct props', () => {
-      expect(comp.vm.moduleName).to.equal('my-module');
-      expect(comp.vm.icon).to.equal('my-icon');
+    it("has correct props", () => {
+      expect(comp.vm.moduleName).to.equal("my-module");
+      expect(comp.vm.icon).to.equal("my-icon");
     });
 
     afterEach(() => {
@@ -38,15 +38,15 @@ describe('modulecore/ToggleButton.vue', () => {
     });
   });
 
-  describe('data', () => {
+  describe("data", () => {
     let comp;
     beforeEach(() => {
       comp = shallowMount(ToggleButton, {
-        propsData: buttonProps
+        propsData: buttonProps,
       });
     });
 
-    it('has correct default data', () => {
+    it("has correct default data", () => {
       expect(comp.vm.show).to.equal(false);
     });
 
@@ -55,15 +55,15 @@ describe('modulecore/ToggleButton.vue', () => {
     });
   });
 
-  describe('methods', () => {
+  describe("methods", () => {
     let comp;
     beforeEach(() => {
       comp = shallowMount(ToggleButton, {
-        propsData: buttonProps
+        propsData: buttonProps,
       });
     });
 
-    it('toggleUi switches show', () => {
+    it("toggleUi switches show", () => {
       comp.vm.show = false;
       comp.vm.toggleUi();
       expect(comp.vm.show).to.equal(true);

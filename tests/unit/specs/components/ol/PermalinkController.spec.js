@@ -1,68 +1,70 @@
-import Vue from 'vue';
-import { mount } from '@vue/test-utils';
-import Map from '@/components/ol/Map';
-import VectorLayer from 'ol/layer/Vector';
+import Vue from "vue";
+import { mount } from "@vue/test-utils";
+import Map from "@/components/ol/Map";
+import VectorLayer from "ol/layer/Vector";
 const permalinkDef = {
   mapZoom: 2,
   mapCenter: [0, 0],
-  mapLayers: [{
-    type: 'OSM',
-    lid: 'osm-bg',
-    isBaseLayer: false,
-    visible: true,
-    selectable: false,
-    displayInLayerList: false
-  },
-  {
-    type: 'TILEWMS',
-    lid: 'ahocevar-wms',
-    format: 'image/png',
-    layers: 'topp:states',
-    url: 'https://ahocevar.com/geoserver/wms',
-    transparent: true,
-    projection: 'EPSG:3857',
-    attribution: '',
-    isBaseLayer: false,
-    visible: false,
-    displayInLayerList: true
-  },
-  {
-    type: 'IMAGEWMS',
-    lid: 'ahocevar-imagewms',
-    format: 'image/png',
-    layers: 'ne:ne_10m_populated_places',
-    url: 'https://ahocevar.com/geoserver/wms',
-    transparent: true,
-    projection: 'EPSG:3857',
-    attribution: '',
-    isBaseLayer: false,
-    visible: false,
-    displayInLayerList: true
-  },
-  {
-    type: 'OSM',
-    lid: 'permalink-excluded-layer',
-    isBaseLayer: false,
-    visible: true,
-    selectable: false,
-    displayInLayerList: false,
-    supportsPermalink: false
-  }],
+  mapLayers: [
+    {
+      type: "OSM",
+      lid: "osm-bg",
+      isBaseLayer: false,
+      visible: true,
+      selectable: false,
+      displayInLayerList: false,
+    },
+    {
+      type: "TILEWMS",
+      lid: "ahocevar-wms",
+      format: "image/png",
+      layers: "topp:states",
+      url: "https://ahocevar.com/geoserver/wms",
+      transparent: true,
+      projection: "EPSG:3857",
+      attribution: "",
+      isBaseLayer: false,
+      visible: false,
+      displayInLayerList: true,
+    },
+    {
+      type: "IMAGEWMS",
+      lid: "ahocevar-imagewms",
+      format: "image/png",
+      layers: "ne:ne_10m_populated_places",
+      url: "https://ahocevar.com/geoserver/wms",
+      transparent: true,
+      projection: "EPSG:3857",
+      attribution: "",
+      isBaseLayer: false,
+      visible: false,
+      displayInLayerList: true,
+    },
+    {
+      type: "OSM",
+      lid: "permalink-excluded-layer",
+      isBaseLayer: false,
+      visible: true,
+      selectable: false,
+      displayInLayerList: false,
+      supportsPermalink: false,
+    },
+  ],
   permalink: {
-    location: 'hash',
+    location: "hash",
     layers: true,
     extent: false,
-    projection: 'EPSG:4326',
-    paramPrefix: '',
-    history: true
+    projection: "EPSG:4326",
+    paramPrefix: "",
+    history: true,
   },
-  modules: {}
+  modules: {},
 };
 
-document.location.hash = '';
+document.location.hash = "";
 
-describe('ol/Map.vue', () => {
-  describe('data - Map NOT Provides PermalinkController when NOT defined', () => {
+describe("ol/Map.vue", () => {
+  describe("data - Map NOT Provides PermalinkController when NOT defined", () => {
     let comp;
     let vm;
     beforeEach(() => {
@@ -71,7 +73,7 @@ describe('ol/Map.vue', () => {
       vm = comp.vm;
     });
 
-    it('Map has NOT instantiated permalinkController', () => {
+    it("Map has NOT instantiated permalinkController", () => {
       expect(vm.permalinkController).to.equal(undefined);
     });
 
@@ -80,7 +82,7 @@ describe('ol/Map.vue', () => {
     });
   });
 
-  describe('data - Map Provides PermalinkController when defined', () => {
+  describe("data - Map Provides PermalinkController when defined", () => {
     let comp;
     let vm;
     beforeEach(() => {
@@ -89,7 +91,7 @@ describe('ol/Map.vue', () => {
       vm = comp.vm;
     });
 
-    it('Map has instantiated permalinkController', () => {
+    it("Map has instantiated permalinkController", () => {
       expect(vm.permalinkController).to.not.be.empty;
     });
 
@@ -98,7 +100,7 @@ describe('ol/Map.vue', () => {
     });
   });
 
-  describe('data - PermalinkController successfully setup', () => {
+  describe("data - PermalinkController successfully setup", () => {
     let comp;
     let vm;
     beforeEach(() => {
@@ -107,7 +109,7 @@ describe('ol/Map.vue', () => {
       vm = comp.vm;
     });
 
-    it('Setup permalinkController', () => {
+    it("Setup permalinkController", () => {
       expect(vm.permalinkController.shouldUpdate).equals(true);
       expect(vm.map.getLayers().getLength()).to.equal(4);
       vm.permalinkController.unsubscribeLayers();
@@ -116,7 +118,7 @@ describe('ol/Map.vue', () => {
       expect(vm.permalinkController.layerListeners.length).to.equal(4);
     });
 
-    it('Layer Listeners are (re)created when the layer stack changes', () => {
+    it("Layer Listeners are (re)created when the layer stack changes", () => {
       vm.map.addLayer(new VectorLayer());
       expect(vm.permalinkController.layerListeners.length).to.equal(5);
       expect(vm.map.getLayers().getLength()).to.equal(5);
@@ -129,7 +131,7 @@ describe('ol/Map.vue', () => {
     });
   });
 
-  describe('data - PermalinkController up to date with Map View', () => {
+  describe("data - PermalinkController up to date with Map View", () => {
     let comp;
     let vm;
     beforeEach(() => {
@@ -138,13 +140,17 @@ describe('ol/Map.vue', () => {
       vm = comp.vm;
     });
 
-    it('Setup and apply permalinkController - defaults', () => {
+    it("Setup and apply permalinkController - defaults", () => {
       vm.permalinkController.setup();
-      expect(vm.permalinkController.getState().zoom).to.equal(permalinkDef.mapZoom);
-      expect(vm.permalinkController.getParamStr()).to.equal('#z=2&c=0%2C0&r=0&l=osm-bg');
+      expect(vm.permalinkController.getState().zoom).to.equal(
+        permalinkDef.mapZoom
+      );
+      expect(vm.permalinkController.getParamStr()).to.equal(
+        "#z=2&c=0%2C0&r=0&l=osm-bg"
+      );
     });
 
-    it('Setup and apply permalinkController - modify Map View', () => {
+    it("Setup and apply permalinkController - modify Map View", () => {
       vm.permalinkController.setup();
       const mapView = vm.map.getView();
       const newZoom = 8;
@@ -153,14 +159,20 @@ describe('ol/Map.vue', () => {
       mapView.setCenter(newCenter);
       expect(vm.permalinkController.getState().zoom).to.equal(newZoom);
       // Map coordinates in Web Mercator converted to WGS84!
-      expect(vm.permalinkController.getParamStr()).to.equal('#z=' + newZoom + '&c=8.9832%2C17.6789&r=0&l=osm-bg');
+      expect(vm.permalinkController.getParamStr()).to.equal(
+        "#z=" + newZoom + "&c=8.9832%2C17.6789&r=0&l=osm-bg"
+      );
       // Make each Layer visible: must change param string to contain all Layers.
       vm.map.getLayers().forEach((layer) => {
         if (layer.getVisible() === false) {
           layer.setVisible(true);
         }
       });
-      expect(vm.permalinkController.getParamStr()).to.equal('#z=' + newZoom + '&c=8.9832%2C17.6789&r=0&l=ahocevar-imagewms%2Cahocevar-wms%2Cosm-bg');
+      expect(vm.permalinkController.getParamStr()).to.equal(
+        "#z=" +
+          newZoom +
+          "&c=8.9832%2C17.6789&r=0&l=ahocevar-imagewms%2Cahocevar-wms%2Cosm-bg"
+      );
     });
 
     afterEach(() => {
@@ -168,7 +180,7 @@ describe('ol/Map.vue', () => {
     });
   });
 
-  describe('data - PermalinkController applied from document.location.hash/search', () => {
+  describe("data - PermalinkController applied from document.location.hash/search", () => {
     let comp;
     let vm;
     beforeEach(() => {
@@ -177,12 +189,14 @@ describe('ol/Map.vue', () => {
       vm = comp.vm;
     });
 
-    it('Setup and apply permalinkController - apply from document.location.hash', () => {
+    it("Setup and apply permalinkController - apply from document.location.hash", () => {
       vm.permalinkController.setup();
-      document.location.hash = '#z=4&c=4%2C52&r=0&l=osm-bg%2Cahocevar-wms';
+      document.location.hash = "#z=4&c=4%2C52&r=0&l=osm-bg%2Cahocevar-wms";
       vm.permalinkController.apply();
       expect(vm.permalinkController.getState().zoom).to.equal(4);
-      expect(vm.permalinkController.getParamStr()).to.equal(document.location.hash);
+      expect(vm.permalinkController.getParamStr()).to.equal(
+        document.location.hash
+      );
       // Map View should reflect hash string above (in Web Merc projection)
       const map = vm.map;
       const mapView = map.getView();

@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import Vue from "vue";
 
 /**
  * Directive to make a window component draggable by dragging it's header.
@@ -22,49 +22,58 @@ export const DraggableWin = {
     draggerOffsetTop: 0,
     overlay: null,
     draggableEl: null,
-    initialZIndex: undefined
+    initialZIndex: undefined,
   },
 
-  bind (elmnt, binding, vnode) {
+  bind(elmnt, binding, vnode) {
     if (binding.value === false) {
       // disable this directive if set to v-draggable-win="false"
       return;
     }
     // get the header element to bind the events on it
-    const header = elmnt.querySelector('div.wgu-win-title');
+    const header = elmnt.querySelector("div.wgu-win-title");
     if (!header) {
       return;
     }
     const dragConfig = DraggableWin.dragConfig;
 
     // restrict the dragging at least to window title
-    dragConfig.draggableElementSelector = binding.arg || 'wgu-win-title';
+    dragConfig.draggableElementSelector = binding.arg || "wgu-win-title";
 
     // set cursor so it's signal that the user can drag the window
-    header.style.cursor = 'move';
+    header.style.cursor = "move";
 
-    elmnt.addEventListener('mouseup', (e) => DraggableWin.mouseup(e, elmnt, dragConfig));
-    elmnt.addEventListener('mousedown', (e) => DraggableWin.mousedown(e, elmnt, dragConfig));
-    elmnt.addEventListener('mousemove', (e) => DraggableWin.mousemove(e, elmnt, dragConfig));
+    elmnt.addEventListener("mouseup", (e) =>
+      DraggableWin.mouseup(e, elmnt, dragConfig)
+    );
+    elmnt.addEventListener("mousedown", (e) =>
+      DraggableWin.mousedown(e, elmnt, dragConfig)
+    );
+    elmnt.addEventListener("mousemove", (e) =>
+      DraggableWin.mousemove(e, elmnt, dragConfig)
+    );
     dragConfig.initialZIndex = elmnt.style.zIndex;
 
     /**
      * Creates an overlay in order to bind the mouse events to it.
      * @private
      */
-    function createOverlay (e, el, _data) {
-      const overlay = document.createElement('div');
-      overlay.setAttribute('style', `
+    function createOverlay(e, el, _data) {
+      const overlay = document.createElement("div");
+      overlay.setAttribute(
+        "style",
+        `
         width: 100vw;
         height: 100vh;
         position: absolute;
         top: 0;
         left: 0;
         z-index: 10000;
-      `);
-      overlay.addEventListener('mouseup', (e) => mouseup(e, el, _data));
-      overlay.addEventListener('mousedown', (e) => mousedown(e, el, _data));
-      overlay.addEventListener('mousemove', (e) => mousemove(e, el, _data));
+      `
+      );
+      overlay.addEventListener("mouseup", (e) => mouseup(e, el, _data));
+      overlay.addEventListener("mousedown", (e) => mousedown(e, el, _data));
+      overlay.addEventListener("mousemove", (e) => mousemove(e, el, _data));
       document.body.appendChild(overlay);
 
       return overlay;
@@ -73,7 +82,7 @@ export const DraggableWin = {
     /**
      * Checks if the given selector (id or class) occurs in the given path
      */
-    function checkIfSelectorInPath (selector, path) {
+    function checkIfSelectorInPath(selector, path) {
       if (!path) {
         return false;
       }
@@ -93,14 +102,14 @@ export const DraggableWin = {
     /**
      * Adjusts element's z-index.
      */
-    function adjustElementZIndex (el, index) {
+    function adjustElementZIndex(el, index) {
       el.style.zIndex = index;
     }
 
     /**
      * Event handler for mouse down.
      */
-    function mousedown (e, el, _data) {
+    function mousedown(e, el, _data) {
       // if the user set a argument to v-drag,
       // it means they only want a specific area to be draggable
       // eg: `v-drag:drag-header` means only the element with
@@ -111,8 +120,10 @@ export const DraggableWin = {
       // get the element path
       const path = e.path || (e.composedPath && e.composedPath());
 
-      if (_data.draggableElementSelector &&
-          !checkIfSelectorInPath(_data.draggableElementSelector, path)) {
+      if (
+        _data.draggableElementSelector &&
+        !checkIfSelectorInPath(_data.draggableElementSelector, path)
+      ) {
         return;
       }
 
@@ -138,15 +149,15 @@ export const DraggableWin = {
     /**
      * Event handler for mouse up.
      */
-    function mouseup (e, el, _data) {
-      _data.down = false
+    function mouseup(e, el, _data) {
+      _data.down = false;
       if (!_data.overlay) {
-        return
+        return;
       }
 
-      _data.overlay.removeEventListener('mouseup', mouseup);
-      _data.overlay.removeEventListener('mousedown', mousedown);
-      _data.overlay.removeEventListener('mousemove', mousemove);
+      _data.overlay.removeEventListener("mouseup", mouseup);
+      _data.overlay.removeEventListener("mousedown", mousedown);
+      _data.overlay.removeEventListener("mousemove", mousemove);
       _data.overlay.remove();
       adjustElementZIndex(el, _data.initialZIndex);
 
@@ -154,58 +165,68 @@ export const DraggableWin = {
 
       // preserve the current position as property of the vue / Wegue window
       // so it can be restored when the window is re-opened
-      vnode.componentInstance.$parent.top = (_data.draggerOffsetTop) + 'px';
-      vnode.componentInstance.$parent.left = (_data.draggerOffsetLeft) + 'px';
+      vnode.componentInstance.$parent.top = _data.draggerOffsetTop + "px";
+      vnode.componentInstance.$parent.left = _data.draggerOffsetLeft + "px";
     }
     DraggableWin.mouseup = mouseup;
 
     /**
      * Checks if left window boundary is reached.
      */
-    function reachedLeft (el, _data, movingLeft) {
-      return (el.offsetLeft + _data.width >= window.innerWidth) && !movingLeft;
+    function reachedLeft(el, _data, movingLeft) {
+      return el.offsetLeft + _data.width >= window.innerWidth && !movingLeft;
     }
 
     /**
      * Checks if right window boundary is reached.
      */
-    function reachedRight (el, _data, movingRight) {
+    function reachedRight(el, _data, movingRight) {
       return el.offsetLeft <= 0 && !movingRight;
     }
 
     /**
      * Checks if top window boundary is reached.
      */
-    function reachedTop (el, _data, movingUp) {
+    function reachedTop(el, _data, movingUp) {
       return el.offsetTop <= 0 && !movingUp;
     }
 
     /**
      * Checks if bottom window boundary is reached.
      */
-    function reachedBottom (el, _data, movingDown) {
-      return ((el.offsetTop + _data.height) >= window.innerHeight) && !movingDown;
+    function reachedBottom(el, _data, movingDown) {
+      return el.offsetTop + _data.height >= window.innerHeight && !movingDown;
     }
 
     /**
      * Event handler for mouse move.
      */
-    function mousemove (e, el, _data) {
+    function mousemove(e, el, _data) {
       if (_data.down) {
         const movingLeft = _data.cursorPreviousX > e.clientX;
         const movingRight = _data.cursorPreviousX < e.clientX;
         const movingUp = _data.cursorPreviousY < e.clientY;
         const movingDown = _data.cursorPreviousY > e.clientY;
 
-        if (_data.constraintToWindow && (reachedLeft(el, _data, movingLeft) || reachedRight(el, _data, movingRight))) {
+        if (
+          _data.constraintToWindow &&
+          (reachedLeft(el, _data, movingLeft) ||
+            reachedRight(el, _data, movingRight))
+        ) {
           // do now allow moving outside the window horizontally
         } else {
-          el.style.left = _data.draggerOffsetLeft + (e.clientX - _data.initialX) + 'px';
+          el.style.left =
+            _data.draggerOffsetLeft + (e.clientX - _data.initialX) + "px";
         }
-        if (_data.constraintToWindow && (reachedTop(el, _data, movingUp) || reachedBottom(el, _data, movingDown))) {
+        if (
+          _data.constraintToWindow &&
+          (reachedTop(el, _data, movingUp) ||
+            reachedBottom(el, _data, movingDown))
+        ) {
           // do now allow moving outside the window vertically
         } else {
-          el.style.top = _data.draggerOffsetTop + (e.clientY - _data.initialY) + 'px';
+          el.style.top =
+            _data.draggerOffsetTop + (e.clientY - _data.initialY) + "px";
         }
       }
       _data.cursorPreviousX = e.clientX;
@@ -216,12 +237,12 @@ export const DraggableWin = {
     /**
      * Applies the offset values of the element.
      */
-    function setDraggerOffset (el, _data) {
+    function setDraggerOffset(el, _data) {
       _data.draggerOffsetLeft = el.offsetLeft;
       _data.draggerOffsetTop = el.offsetTop;
     }
-  }
+  },
 };
 
 // Make directive available globally
-Vue.directive('draggable-win', DraggableWin);
+Vue.directive("draggable-win", DraggableWin);

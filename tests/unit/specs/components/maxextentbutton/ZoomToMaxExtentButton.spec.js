@@ -1,32 +1,32 @@
-import Vue from 'vue'
-import ZoomToMaxExtentButton from '@/components/maxextentbutton/ZoomToMaxExtentButton'
-import OlMap from 'ol/Map';
-import OlView from 'ol/View';
-import { shallowMount } from '@vue/test-utils';
+import Vue from "vue";
+import ZoomToMaxExtentButton from "@/components/maxextentbutton/ZoomToMaxExtentButton";
+import OlMap from "ol/Map";
+import OlView from "ol/View";
+import { shallowMount } from "@vue/test-utils";
 
-describe('maxextentbutton/ZoomToMaxExtentButton.vue', () => {
+describe("maxextentbutton/ZoomToMaxExtentButton.vue", () => {
   let comp;
   let vm;
   beforeEach(() => {
     Vue.prototype.$appConfig = {
       mapCenter: [0, 0],
-      mapZoom: 0
+      mapZoom: 0,
     };
     comp = shallowMount(ZoomToMaxExtentButton);
     vm = comp.vm;
   });
 
   // Check methods
-  it('has a method onClick', () => {
-    expect(typeof vm.onClick).to.equal('function');
+  it("has a method onClick", () => {
+    expect(typeof vm.onClick).to.equal("function");
   });
 
-  it('onClick sets correct center and zoom', () => {
+  it("onClick sets correct center and zoom", () => {
     vm.map = new OlMap({
       view: new OlView({
         center: [1, 1],
-        zoom: 1
-      })
+        zoom: 1,
+      }),
     });
 
     // Remarks: This works synchronously, if no animation is used.

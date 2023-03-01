@@ -1,5 +1,4 @@
 const StyleUtil = {
-
   /**
    * Appends a style to another style.
    *
@@ -8,9 +7,9 @@ const StyleUtil = {
    *
    * @returns {ol.style.Style}
    */
-  appendStyle (originalStyle, additionalStyle) {
+  appendStyle(originalStyle, additionalStyle) {
     return function (feature, resolution) {
-      if (typeof originalStyle === 'function') {
+      if (typeof originalStyle === "function") {
         const layerStyleFunction = originalStyle;
 
         // check what kind of result we can expect
@@ -21,17 +20,17 @@ const StyleUtil = {
           const resultArray = [additionalStyle];
 
           // add the array elements to the result Array
-          layerStyle.forEach(item => resultArray.push(item));
+          layerStyle.forEach((item) => resultArray.push(item));
           return resultArray;
         } else {
           // classic case that result is a simple style
-          return [additionalStyle, layerStyleFunction(feature, resolution)]
+          return [additionalStyle, layerStyleFunction(feature, resolution)];
         }
       } else {
-        return [additionalStyle, originalStyle]
+        return [additionalStyle, originalStyle];
       }
     };
-  }
+  },
 };
 
 export default StyleUtil;

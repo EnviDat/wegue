@@ -8,7 +8,7 @@ const ColorUtil = {
    * @param {String} color (Color) string to test
    * @return {Boolean} true if given string is in CSS color notation
    */
-  isCssColor (color) {
+  isCssColor(color) {
     return !!color && !!color.match(/^(#|(rgb|hsl)a?\()/);
   },
 
@@ -37,16 +37,16 @@ const ColorUtil = {
     b = b / 255.0;
 
     // https://www.w3.org/TR/WCAG20/#relativeluminancedef
-    r = r <= 0.03928 ? r / 12.92 : Math.pow(((r + 0.055) / 1.055), 2.4)
-    g = g <= 0.03928 ? g / 12.92 : Math.pow(((g + 0.055) / 1.055), 2.4)
-    b = b <= 0.03928 ? b / 12.92 : Math.pow(((b + 0.055) / 1.055), 2.4)
+    r = r <= 0.03928 ? r / 12.92 : Math.pow((r + 0.055) / 1.055, 2.4);
+    g = g <= 0.03928 ? g / 12.92 : Math.pow((g + 0.055) / 1.055, 2.4);
+    b = b <= 0.03928 ? b / 12.92 : Math.pow((b + 0.055) / 1.055, 2.4);
 
     // https://www.w3.org/TR/WCAG20/#relativeluminancedef
     const luma = 0.2126 * r + 0.7152 * g + 0.0722 * b;
 
     // returns true if dark color
     return luma <= 0.179;
-  }
-}
+  },
+};
 
 export default ColorUtil;

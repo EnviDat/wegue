@@ -1,4 +1,3 @@
-
 html {
   /* otherwise we have always vertical scrollbars */
   overflow-y: hidden !important;
@@ -31,15 +30,15 @@ html {
   them a border for better map contrast.
 */
 .wgu-map-button {
-  position: absolute; 
-  z-index: 2; 
+  position: absolute;
+  z-index: 2;
   padding: 3px;
   border-radius: 50%;
-  background-color: rgba(255,255,255,0.4) !important;  
+  background-color: rgba(255, 255, 255, 0.4) !important;
 }
 
 .wgu-map-button:hover {
-  background-color: rgba(255,255,255,0.6) !important;
+  background-color: rgba(255, 255, 255, 0.6) !important;
 }
 
 /* 
@@ -82,9 +81,8 @@ html {
   Temporary fix for buggy scrollbar behavior in Firefox under Linux Mint.
   Review this in a future vuetify version. 
 */
-#wgu-overviewmap-wrapper > .v-menu__content 
-{
-	overflow-y: hidden;  
+#wgu-overviewmap-wrapper > .v-menu__content {
+  overflow-y: hidden;
 }
 
 /*
@@ -98,11 +96,10 @@ html {
   https://material.io/archive/guidelines/components/text-fields.html#text-fields-field-variations
 */
 .wgu-solo-field.theme--light > .v-input__control fieldset,
-.wgu-solo-field.theme--light > .v-input__control .v-icon, 
+.wgu-solo-field.theme--light > .v-input__control .v-icon,
 .wgu-solo-field.theme--light > .v-input__control .v-label,
 .wgu-solo-field.theme--light > .v-input__control input,
-.wgu-solo-field.theme--light > .v-input__control .v-select__selection
-{
+.wgu-solo-field.theme--light > .v-input__control .v-select__selection {
   color: var(--v-onprimary-base) !important;
 }
 
@@ -128,30 +125,31 @@ html {
 .wgu-footer-right {
   padding-right: 5px;
 }
-.wgu-footer-left a, .wgu-footer-right a {
+.wgu-footer-left a,
+.wgu-footer-right a {
   color: inherit;
 }
 
 .wgu-module-card.wgu-floating {
   position: absolute;
   z-index: 2;
-} 
+}
 
 .wgu-win-title {
-   -moz-user-select: none;
-   -khtml-user-select: none;
-   -webkit-user-select: none;
-   /* Introduced in IE 10, See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/ */
-   -ms-user-select: none;
-   user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  /* Introduced in IE 10, See http://ie.microsoft.com/testdrive/HTML5/msUserSelect/ */
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .wgu-app-sidebar {
-  overflow: visible
+  overflow: visible;
 }
 
 .wgu-app-sidebar-toggle-btn {
-  left: 100%; 
+  left: 100%;
   visibility: visible;
   width: 20px;
   min-width: 20px !important;
@@ -172,6 +170,7 @@ html {
 /* Temporary fix for buggy word-breaking in vuetify card texts and titles.
   This will go away in a future vuetify version - 
   see https://github.com/vuetifyjs/vuetify/issues/9130 */
-.v-card__text, .v-card__title {
+.v-card__text,
+.v-card__title {
   word-break: normal;
 }

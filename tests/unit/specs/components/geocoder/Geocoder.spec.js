@@ -1,81 +1,83 @@
-import { shallowMount } from '@vue/test-utils';
-import Vuetify from 'vuetify'
-import Geocoder from '@/components/geocoder/Geocoder';
-import { OpenStreetMap } from '../../../../../src/components/geocoder/providers/osm';
-import { Photon } from '../../../../../src/components/geocoder/providers/photon';
-import { OpenCage } from '../../../../../src/components/geocoder/providers/opencage';
-import OlMap from 'ol/Map';
-import { fromLonLat } from 'ol/proj';
+import { shallowMount } from "@vue/test-utils";
+import Vuetify from "vuetify";
+import Geocoder from "@/components/geocoder/Geocoder";
+import { OpenStreetMap } from "../../../../../src/components/geocoder/providers/osm";
+import { Photon } from "../../../../../src/components/geocoder/providers/photon";
+import { OpenCage } from "../../../../../src/components/geocoder/providers/opencage";
+import OlMap from "ol/Map";
+import { fromLonLat } from "ol/proj";
 // import * as sinon from 'sinon';
 
-describe('geocoder/Geocoder.vue', () => {
+describe("geocoder/Geocoder.vue", () => {
   const vuetify = new Vuetify();
 
   // Inspect the raw component options
-  it('is defined', () => {
-    expect(typeof Geocoder).to.not.equal('undefined');
+  it("is defined", () => {
+    expect(typeof Geocoder).to.not.equal("undefined");
   });
 
-  it('has a mounted hook', () => {
-    expect(typeof Geocoder.mounted).to.equal('function');
+  it("has a mounted hook", () => {
+    expect(typeof Geocoder.mounted).to.equal("function");
   });
 
-  describe('props', () => {
+  describe("props", () => {
     let comp;
     beforeEach(() => {
       comp = shallowMount(Geocoder, {
-        vuetify
+        vuetify,
       });
     });
 
-    it('has correct default props', () => {
-      expect(comp.vm.icon).to.equal('search');
+    it("has correct default props", () => {
+      expect(comp.vm.icon).to.equal("search");
       expect(comp.vm.rounded).to.equal(true);
       expect(comp.vm.autofocus).to.equal(true);
       expect(comp.vm.persistentHint).to.equal(true);
     });
   });
 
-  describe('default data and Provider', () => {
+  describe("default data and Provider", () => {
     let comp;
     let vm;
 
     beforeEach(() => {
       comp = shallowMount(Geocoder, {
-        vuetify
+        vuetify,
       });
       vm = comp.vm;
     });
 
-    it('has correct default data and Provider', () => {
+    it("has correct default data and Provider", () => {
       expect(vm.hideSearch).to.equal(true);
       expect(vm.minChars).to.equal(3);
       expect(vm.queryDelay).to.equal(300);
       expect(vm.geocoderController !== undefined).to.equal(true);
-      expect(vm.geocoderController.provider instanceof OpenStreetMap).to.equal(true);
+      expect(vm.geocoderController.provider instanceof OpenStreetMap).to.equal(
+        true
+      );
     });
   });
 
-  describe('configured data and Provider - Photon', () => {
+  describe("configured data and Provider - Photon", () => {
     let comp;
     let vm;
 
     beforeEach(() => {
       const moduleProps = {
-        target: 'toolbar',
+        target: "toolbar",
         minChars: 5,
         queryDelay: 200,
         debug: false,
-        provider: 'photon'
+        provider: "photon",
       };
       comp = shallowMount(Geocoder, {
         vuetify,
-        propsData: moduleProps
+        propsData: moduleProps,
       });
       vm = comp.vm;
     });
 
-    it('has correct configured data and Provider', () => {
+    it("has correct configured data and Provider", () => {
       expect(vm.hideSearch).to.equal(true);
       expect(vm.minChars).to.equal(5);
       expect(vm.queryDelay).to.equal(200);
@@ -84,26 +86,26 @@ describe('geocoder/Geocoder.vue', () => {
     });
   });
 
-  describe('configured data and Provider - OpenCage', () => {
+  describe("configured data and Provider - OpenCage", () => {
     let comp;
     let vm;
 
     beforeEach(() => {
       const moduleProps = {
-        target: 'toolbar',
+        target: "toolbar",
         minChars: 6,
         queryDelay: 200,
         debug: false,
-        provider: 'opencage'
+        provider: "opencage",
       };
       comp = shallowMount(Geocoder, {
         vuetify,
-        propsData: moduleProps
+        propsData: moduleProps,
       });
       vm = comp.vm;
     });
 
-    it('has correct configured data and Provider', () => {
+    it("has correct configured data and Provider", () => {
       expect(vm.hideSearch).to.equal(true);
       expect(vm.minChars).to.equal(6);
       expect(vm.queryDelay).to.equal(200);
@@ -112,24 +114,24 @@ describe('geocoder/Geocoder.vue', () => {
     });
   });
 
-  describe('methods - search', () => {
+  describe("methods - search", () => {
     let comp;
     let vm;
     // let fakeXhr;
     // let clock;
     // let requests = [];
-    const queryString = 'Heerstraße 52 bonn';
+    const queryString = "Heerstraße 52 bonn";
     let selectionItems;
 
     beforeEach(() => {
       const moduleProps = {
-        target: 'toolbar',
+        target: "toolbar",
         queryDelay: 2,
-        provider: 'osm'
+        provider: "osm",
       };
       comp = shallowMount(Geocoder, {
         vuetify,
-        propsData: moduleProps
+        propsData: moduleProps,
       });
       vm = comp.vm;
 
@@ -141,22 +143,22 @@ describe('geocoder/Geocoder.vue', () => {
       // };
     });
 
-    it('functions are implemented', () => {
-      expect(typeof vm.toggle).to.equal('function');
-      expect(typeof vm.querySelections).to.equal('function');
-      expect(typeof vm.onQueryResults).to.equal('function');
+    it("functions are implemented", () => {
+      expect(typeof vm.toggle).to.equal("function");
+      expect(typeof vm.querySelections).to.equal("function");
+      expect(typeof vm.onQueryResults).to.equal("function");
     });
 
-    it('GeoCoderController calls remote service', done => {
-      vm.geocoderController.query(queryString).then(results => {
+    it("GeoCoderController calls remote service", (done) => {
+      vm.geocoderController.query(queryString).then((results) => {
         expect(results === undefined).to.equal(false);
         expect(results.length > 0).to.equal(true);
-        expect(results[0].address.road === 'Heerstraße').to.equal(true);
+        expect(results[0].address.road === "Heerstraße").to.equal(true);
         done();
       });
     });
 
-    it('search watcher assigns last query string', done => {
+    it("search watcher assigns last query string", (done) => {
       vm.search = queryString;
       vm.$nextTick(() => {
         expect(vm.lastQueryStr === queryString).to.equal(true);
@@ -164,7 +166,7 @@ describe('geocoder/Geocoder.vue', () => {
       });
     });
 
-    it('search watcher query with results', done => {
+    it("search watcher query with results", (done) => {
       vm.search = queryString;
       vm.$nextTick(() => {
         expect(vm.lastQueryStr === queryString).to.equal(true);
@@ -174,10 +176,10 @@ describe('geocoder/Geocoder.vue', () => {
         setTimeout(function () {
           expect(vm.results === undefined).to.equal(false);
           expect(vm.results.length > 0).to.equal(true);
-          expect(vm.results[0].address.road === 'Heerstraße').to.equal(true);
+          expect(vm.results[0].address.road === "Heerstraße").to.equal(true);
 
           // Items from query result should be assigned to combobox
-          const comboBox = comp.findComponent({ name: 'v-combobox' });
+          const comboBox = comp.findComponent({ name: "v-combobox" });
           selectionItems = comboBox.vnode.data.attrs.items;
           expect(selectionItems === undefined).to.equal(false);
           expect(selectionItems.length === vm.results.length).to.equal(true);
@@ -186,7 +188,7 @@ describe('geocoder/Geocoder.vue', () => {
       });
     });
 
-    it('select items watcher assigns result and zooms/centers Map at result', done => {
+    it("select items watcher assigns result and zooms/centers Map at result", (done) => {
       vm.map = new OlMap();
       vm.selected = selectionItems[0];
       vm.$nextTick(() => {
@@ -196,7 +198,8 @@ describe('geocoder/Geocoder.vue', () => {
         // Map may have different projection than WGS84
         const coords = fromLonLat(
           [selectionItems[0].value.lon, selectionItems[0].value.lat],
-          vm.map.getView().getProjection());
+          vm.map.getView().getProjection()
+        );
         expect(mapCenter[0] === coords[0]);
         expect(mapCenter[1] === coords[1]);
         done();
@@ -210,52 +213,52 @@ describe('geocoder/Geocoder.vue', () => {
     });
   });
 
-  describe('user interactions for search activation', () => {
+  describe("user interactions for search activation", () => {
     let comp;
     let vm;
 
     beforeEach(() => {
       comp = shallowMount(Geocoder, {
-        vuetify
+        vuetify,
       });
       vm = comp.vm;
     });
 
-    it('toggle show/hides search input', () => {
+    it("toggle show/hides search input", () => {
       vm.toggle();
       expect(vm.hideSearch).to.equal(false);
       vm.toggle();
       expect(vm.hideSearch).to.equal(true);
     });
 
-    it('button click should toggle search input visibility', done => {
+    it("button click should toggle search input visibility", (done) => {
       // Two subwidgets
-      const button = comp.findComponent({ name: 'v-btn' });
-      const comboBox = comp.findComponent({ name: 'v-combobox' });
+      const button = comp.findComponent({ name: "v-btn" });
+      const comboBox = comp.findComponent({ name: "v-combobox" });
 
       // Initial state
       expect(vm.hideSearch).to.equal(true);
-      expect(comboBox.attributes('hidden')).to.equal('true');
+      expect(comboBox.attributes("hidden")).to.equal("true");
 
       // Make visible
-      button.vm.$emit('click');
+      button.vm.$emit("click");
       vm.$nextTick(() => {
         expect(vm.hideSearch).to.equal(false);
         // So looks like the 'hidden' attr is simply removed/added through toggle()!
-        expect(comboBox.attributes('hidden')).to.equal(undefined);
+        expect(comboBox.attributes("hidden")).to.equal(undefined);
 
         // And hide
-        button.vm.$emit('click');
+        button.vm.$emit("click");
         vm.$nextTick(() => {
           expect(vm.hideSearch).to.equal(true);
-          expect(comboBox.attributes('hidden')).to.equal('true');
+          expect(comboBox.attributes("hidden")).to.equal("true");
           done();
         });
       });
     });
 
-    it('search input string should trigger search', done => {
-      const queryString = 'heerstrasse 52 bonn';
+    it("search input string should trigger search", (done) => {
+      const queryString = "heerstrasse 52 bonn";
       // Trigger watcher for search input string in combobox
       vm.search = queryString;
       vm.$nextTick(() => {

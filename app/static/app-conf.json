@@ -1,5 +1,4 @@
 {
-
   "colorTheme": {
     "dark": false,
     "themes": {
@@ -13,7 +12,6 @@
         "error": "#ff847b",
         "errorHighlight": "#ffb060",
         "accent": "#FFD740"
-      
       }
     }
   },
@@ -41,7 +39,7 @@
     "displayInLayerList": true
   },
 
-  "overviewMap" : {
+  "overviewMap": {
     "visible": false
   },
 
@@ -64,13 +62,11 @@
   },
 
   "mapLayers": [
-
     {
       "type": "VECTOR",
       "lid": "gendib_27_02_2023",
       "url": "./static/data/gendib_27_02_2023.geojson",
-      "formatConfig": {
-      },
+      "formatConfig": {},
       "format": "GeoJSON",
       "visible": true,
       "selectable": true,
@@ -123,7 +119,6 @@
       "visible": true,
       "crossOrigin": "anonymous"
     }
-
   ],
 
   "modules": {

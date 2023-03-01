@@ -2,14 +2,13 @@
  * Object related utility methods.
  */
 const ObjectUtil = {
-
   /**
    * Tests whether item is an object
    * @param {*} item The item to test.
    * @returns {Boolean} True if the item is an object.
    */
-  isObject (item) {
-    return (item && typeof item === 'object' && !Array.isArray(item));
+  isObject(item) {
+    return item && typeof item === "object" && !Array.isArray(item);
   },
 
   /**
@@ -17,7 +16,7 @@ const ObjectUtil = {
    * @param {Object} target The target of the merge operation.
    * @param {Object} source The source of the merge operation.
    */
-  mergeDeep (target, source) {
+  mergeDeep(target, source) {
     if (ObjectUtil.isObject(target) && ObjectUtil.isObject(source)) {
       for (const key in source) {
         if (ObjectUtil.isObject(source[key])) {
@@ -39,23 +38,23 @@ const ObjectUtil = {
    * @param {String} path Internal usage for recursion.
    * @returns {Array} An array containing all paths to keys of the object.
    */
-  toPaths (item, path = '') {
+  toPaths(item, path = "") {
     const result = [];
-    if (item && typeof item === 'object') {
+    if (item && typeof item === "object") {
       if (Array.isArray(item)) {
         for (let i = 0; i < item.length; i++) {
-          result.push(...ObjectUtil.toPaths(item[i], path + '[' + i + ']'));
+          result.push(...ObjectUtil.toPaths(item[i], path + "[" + i + "]"));
         }
       } else {
         for (const p in item) {
-          result.push(...ObjectUtil.toPaths(item[p], path + '.' + p));
+          result.push(...ObjectUtil.toPaths(item[p], path + "." + p));
         }
       }
     } else {
       result.push(path);
     }
     return result;
-  }
-}
+  },
+};
 
 export default ObjectUtil;

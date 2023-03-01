@@ -31,22 +31,22 @@ export class OpenCage {
   /**
    * @constructor
    */
-  constructor () {
+  constructor() {
     this.settings = {
-      url: 'https://api.opencagedata.com/geocode/v1/json?',
+      url: "https://api.opencagedata.com/geocode/v1/json?",
       params: {
-        q: '',
-        key: '',
+        q: "",
+        key: "",
         limit: 10,
-        countrycodes: '',
-        language: 'en-US',
+        countrycodes: "",
+        language: "en-US",
         pretty: 1,
-        no_annotations: 1
-      }
+        no_annotations: 1,
+      },
     };
   }
 
-  getParameters (options) {
+  getParameters(options) {
     return {
       url: this.settings.url,
       params: {
@@ -54,32 +54,37 @@ export class OpenCage {
         key: options.key,
         limit: options.limit || this.settings.params.limit,
         countrycode: options.countrycodes || this.settings.params.countrycodes,
-        language: options.language || this.settings.params.language
-      }
+        language: options.language || this.settings.params.language,
+      },
     };
   }
 
-  handleResponse (results) {
+  handleResponse(results) {
     if (!results.results || results.results.length === 0) {
       return;
     }
-    return results.results.map(result => ({
+    return results.results.map((result) => ({
       lon: result.geometry.lng,
       lat: result.geometry.lat,
-      boundingbox: result.bounds && [result.bounds.southwest.lng, result.bounds.southwest.lat, result.bounds.northeast.lng, result.bounds.northeast.lat],
+      boundingbox: result.bounds && [
+        result.bounds.southwest.lng,
+        result.bounds.southwest.lat,
+        result.bounds.northeast.lng,
+        result.bounds.northeast.lat,
+      ],
       address: {
         name: result.formatted,
-        road: result.components.road || '',
-        houseNumber: result.components.house_number || '',
-        postcode: result.components.postcode || '',
-        city: result.components.city || result.components.town || '',
-        state: result.components.state || '',
-        country: result.components.country || ''
+        road: result.components.road || "",
+        houseNumber: result.components.house_number || "",
+        postcode: result.components.postcode || "",
+        city: result.components.city || result.components.town || "",
+        state: result.components.state || "",
+        country: result.components.country || "",
       },
       original: {
         formatted: result.formatted,
-        details: result.components
-      }
+        details: result.components,
+      },
     }));
   }
 }

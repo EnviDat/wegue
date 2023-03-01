@@ -1,10 +1,11 @@
 <template>
-  <wgu-module-card v-bind="$attrs"
+  <wgu-module-card
+    v-bind="$attrs"
     :moduleName="moduleName"
     class="wgu-attributetable-win"
     :icon="icon"
-    v-on:visibility-change="show">
-
+    v-on:visibility-change="show"
+  >
     <template v-slot:wgu-win-toolbar>
       <v-select
         v-model="selLayer"
@@ -15,7 +16,7 @@
         outlined
         class="wgu-vector-layer-select wgu-solo-field"
         :items="displayedLayers"
-        :item-text="item => item.get('name')"
+        :item-text="(item) => item.get('name')"
         :menu-props="{
           bottom: true,
           'offset-y': true,
@@ -24,7 +25,7 @@
         return-object
         hide-details
         :label="$t('wgu-attributetable.selectorLabel')"
-        ></v-select>
+      ></v-select>
     </template>
 
     <wgu-attributetable
@@ -38,41 +39,41 @@
 </template>
 
 <script>
-import ModuleCard from './../modulecore/ModuleCard';
-import { Mapable } from '../../mixins/Mapable';
-import { ColorTheme } from '../../mixins/ColorTheme';
-import VectorLayer from 'ol/layer/Vector'
-import AttributeTable from './AttributeTable';
+import ModuleCard from "./../modulecore/ModuleCard";
+import { Mapable } from "../../mixins/Mapable";
+import { ColorTheme } from "../../mixins/ColorTheme";
+import VectorLayer from "ol/layer/Vector";
+import AttributeTable from "./AttributeTable";
 
 export default {
-  name: 'wgu-attributetable-win',
+  name: "wgu-attributetable-win",
   inheritAttrs: false,
 
   props: {
-    icon: { type: String, required: false, default: 'table_chart' },
-    syncTableMapSelection: { type: Boolean, required: false, default: false }
+    icon: { type: String, required: false, default: "table_chart" },
+    syncTableMapSelection: { type: Boolean, required: false, default: false },
   },
-  data () {
+  data() {
     return {
-      moduleName: 'wgu-attributetable',
+      moduleName: "wgu-attributetable",
       layers: [],
-      selLayer: null
-    }
+      selLayer: null,
+    };
   },
   mixins: [Mapable, ColorTheme],
   components: {
-    'wgu-module-card': ModuleCard,
-    'wgu-attributetable': AttributeTable
+    "wgu-module-card": ModuleCard,
+    "wgu-attributetable": AttributeTable,
   },
   methods: {
-    show () {
+    show() {
       // resize map properly after closing
       // the AttributeTable
-      this.resizeOlMap()
+      this.resizeOlMap();
     },
-    onResize () {
+    onResize() {
       // change map size when window is changing
-      this.resizeOlMap()
+      this.resizeOlMap();
     },
 
     /**
@@ -81,54 +82,54 @@ export default {
      * Necessary because the map does not automatically
      * notice when its size is changed externally.
      */
-    resizeOlMap () {
+    resizeOlMap() {
       this.$nextTick(() => {
         // must be within '$nextTick' to take effect
         this.map.updateSize();
-      })
+      });
     },
 
     /**
      * This function is executed, after the map is bound (see mixins/Mapable).
      * Bind to the layers from the OpenLayers map.
      */
-    onMapBound () {
+    onMapBound() {
       this.layers = this.map.getLayers().getArray();
-    }
+    },
   },
   computed: {
     /**
      * Reactive property to return the OpenLayers vector layers to be shown in the selection menu.
      */
-    displayedLayers () {
+    displayedLayers() {
       return this.layers
-        .filter(layer =>
-          layer instanceof VectorLayer &&
-          layer.get('lid') !== 'wgu-measure-layer' &&
-          layer.get('lid') !== 'wgu-geolocator-layer'
+        .filter(
+          (layer) =>
+            layer instanceof VectorLayer &&
+            layer.get("lid") !== "wgu-measure-layer" &&
+            layer.get("lid") !== "wgu-geolocator-layer"
         )
         .reverse();
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped>
-
-  /* TODO
+/* TODO
     Generalize the positioning concept for windows,
     this interferes with positioning and draggable settings in the app.conf */
 
-  .wgu-attributetable-win.wgu-floating {
-    top: inherit !important;
-    position: relative;
-    bottom: 35px;
-  }
+.wgu-attributetable-win.wgu-floating {
+  top: inherit !important;
+  position: relative;
+  bottom: 35px;
+}
 
-  @media only screen and (max-width: 600px) {
-    .wgu-attributetable-win.wgu-floating {
-      bottom: 33px;
-      height: 100%;
-    }
+@media only screen and (max-width: 600px) {
+  .wgu-attributetable-win.wgu-floating {
+    bottom: 33px;
+    height: 100%;
   }
+}
 </style>

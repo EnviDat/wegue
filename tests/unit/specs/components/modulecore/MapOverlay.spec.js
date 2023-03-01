@@ -1,54 +1,53 @@
-
-import MapOverlay from '@/components/modulecore/MapOverlay'
-import { WguEventBus } from '@/WguEventBus'
-import OlMap from 'ol/Map';
-import Feature from 'ol/Feature';
-import Point from 'ol/geom/Point';
-import { shallowMount } from '@vue/test-utils';
+import MapOverlay from "@/components/modulecore/MapOverlay";
+import { WguEventBus } from "@/WguEventBus";
+import OlMap from "ol/Map";
+import Feature from "ol/Feature";
+import Point from "ol/geom/Point";
+import { shallowMount } from "@vue/test-utils";
 
 // Common test data
 const overlayProps = {
-  overlayId: 'my-overlay'
+  overlayId: "my-overlay",
 };
 const coordinate = [1, 1];
 const contentData = {
   feature: new Feature({
-    foo: 'bar',
-    geometry: new Point([0, 0])
+    foo: "bar",
+    geometry: new Point([0, 0]),
   }),
-  hoverAttribute: 'foo'
-}
+  hoverAttribute: "foo",
+};
 
-describe('modulecore/MapOverlay.vue', () => {
-  it('is defined', () => {
-    expect(MapOverlay).to.not.be.an('undefined');
+describe("modulecore/MapOverlay.vue", () => {
+  it("is defined", () => {
+    expect(MapOverlay).to.not.be.an("undefined");
   });
 
-  it('has a created hook', () => {
-    expect(MapOverlay.created).to.be.a('function');
+  it("has a created hook", () => {
+    expect(MapOverlay.created).to.be.a("function");
   });
 
-  describe('props', () => {
+  describe("props", () => {
     let comp;
     let vm;
     beforeEach(() => {
       comp = shallowMount(MapOverlay, {
-        propsData: overlayProps
+        propsData: overlayProps,
       });
       vm = comp.vm;
     });
 
-    it('has correct default props', () => {
+    it("has correct default props", () => {
       expect(vm.visible).to.equal(true);
-      expect(vm.offset).to.be.an('undefined');
-      expect(vm.positioning).to.equal('top-left');
-      expect(vm.coordinates).to.be.an('undefined');
+      expect(vm.offset).to.be.an("undefined");
+      expect(vm.positioning).to.equal("top-left");
+      expect(vm.coordinates).to.be.an("undefined");
       expect(vm.autoPan).to.equal(false);
       expect(vm.autoPanDuration).to.equal(0);
     });
 
-    it('has correct props', () => {
-      expect(vm.overlayId).to.equal('my-overlay');
+    it("has correct props", () => {
+      expect(vm.overlayId).to.equal("my-overlay");
     });
 
     afterEach(() => {
@@ -56,19 +55,19 @@ describe('modulecore/MapOverlay.vue', () => {
     });
   });
 
-  describe('data', () => {
+  describe("data", () => {
     let comp;
     let vm;
     beforeEach(() => {
       comp = shallowMount(MapOverlay, {
-        propsData: overlayProps
+        propsData: overlayProps,
       });
       vm = comp.vm;
     });
 
-    it('has correct default data', () => {
+    it("has correct default data", () => {
       expect(vm.show).to.equal(true);
-      expect(vm.position).to.be.an('undefined');
+      expect(vm.position).to.be.an("undefined");
       expect(vm.olOverlay).to.equal(null);
       expect(vm.contentData).to.equal(null);
     });
@@ -78,28 +77,28 @@ describe('modulecore/MapOverlay.vue', () => {
     });
   });
 
-  describe('methods', () => {
+  describe("methods", () => {
     let comp;
     let vm;
     beforeEach(() => {
       comp = shallowMount(MapOverlay, {
-        propsData: overlayProps
+        propsData: overlayProps,
       });
       vm = comp.vm;
       vm.map = new OlMap({});
       vm.onMapBound();
     });
 
-    it('createOlOverlay adds an OL overlay to map', () => {
+    it("createOlOverlay adds an OL overlay to map", () => {
       vm.createOlOverlay();
 
-      expect(vm.olOverlay).to.not.be.an('undefined');
+      expect(vm.olOverlay).to.not.be.an("undefined");
       expect(vm.olOverlay.getMap()).to.equal(vm.map);
       expect(vm.olOverlay.getElement()).to.equal(vm.$refs.overlayContainer);
-      expect(vm.olOverlay.getId()).to.equal('my-overlay');
+      expect(vm.olOverlay.getId()).to.equal("my-overlay");
       expect(vm.olOverlay.getOffset()).to.eql([0, 0]);
-      expect(vm.olOverlay.getPosition()).to.be.an('undefined');
-      expect(vm.olOverlay.getPositioning()).to.equal('top-left');
+      expect(vm.olOverlay.getPosition()).to.be.an("undefined");
+      expect(vm.olOverlay.getPositioning()).to.equal("top-left");
     });
 
     afterEach(() => {
@@ -107,31 +106,31 @@ describe('modulecore/MapOverlay.vue', () => {
     });
   });
 
-  describe('watchers', () => {
+  describe("watchers", () => {
     let comp;
     let vm;
     beforeEach(() => {
       comp = shallowMount(MapOverlay, {
-        propsData: overlayProps
+        propsData: overlayProps,
       });
       vm = comp.vm;
       vm.map = new OlMap({});
       vm.onMapBound();
     });
 
-    it('watches show', done => {
+    it("watches show", (done) => {
       expect(vm.show).to.equal(true);
-      expect(vm.olOverlay).to.not.be.an('undefined');
+      expect(vm.olOverlay).to.not.be.an("undefined");
 
       vm.show = false;
       vm.$nextTick(() => {
-        expect(vm.olOverlay).to.be.an('undefined');
+        expect(vm.olOverlay).to.be.an("undefined");
         done();
       });
     });
 
-    it('watches position', done => {
-      expect(vm.olOverlay.getPosition()).to.be.an('undefined');
+    it("watches position", (done) => {
+      expect(vm.olOverlay.getPosition()).to.be.an("undefined");
 
       vm.position = coordinate;
       vm.$nextTick(() => {
@@ -145,26 +144,31 @@ describe('modulecore/MapOverlay.vue', () => {
     });
   });
 
-  describe('events', () => {
+  describe("events", () => {
     let comp;
     let vm;
     beforeEach(() => {
       comp = shallowMount(MapOverlay, {
-        propsData: overlayProps
+        propsData: overlayProps,
       });
       vm = comp.vm;
       vm.map = new OlMap({});
       vm.onMapBound();
     });
 
-    it('update-overlay event creates, positions and populates overlay', done => {
+    it("update-overlay event creates, positions and populates overlay", (done) => {
       vm.show = false;
       vm.$nextTick(() => {
-        expect(vm.olOverlay).to.be.an('undefined');
+        expect(vm.olOverlay).to.be.an("undefined");
 
-        WguEventBus.$emit('my-overlay-update-overlay', true, coordinate, contentData);
+        WguEventBus.$emit(
+          "my-overlay-update-overlay",
+          true,
+          coordinate,
+          contentData
+        );
         vm.$nextTick(() => {
-          expect(vm.olOverlay).to.not.be.an('undefined');
+          expect(vm.olOverlay).to.not.be.an("undefined");
           expect(vm.olOverlay.getPosition()).to.eql(coordinate);
           expect(vm.show).to.equal(true);
           expect(vm.contentData).to.equal(contentData);
@@ -173,14 +177,14 @@ describe('modulecore/MapOverlay.vue', () => {
       });
     });
 
-    it('update-overlay event destroys overlay', done => {
+    it("update-overlay event destroys overlay", (done) => {
       vm.show = true;
       vm.$nextTick(() => {
-        expect(vm.olOverlay).to.not.be.an('undefined');
+        expect(vm.olOverlay).to.not.be.an("undefined");
 
-        WguEventBus.$emit('my-overlay-update-overlay', false);
+        WguEventBus.$emit("my-overlay-update-overlay", false);
         vm.$nextTick(() => {
-          expect(vm.olOverlay).to.be.an('undefined');
+          expect(vm.olOverlay).to.be.an("undefined");
           expect(vm.show).to.equal(false);
           done();
         });

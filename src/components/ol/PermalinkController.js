@@ -1,7 +1,7 @@
-import Projection from 'ol/proj/Projection';
-import { getTransform, transform } from 'ol/proj';
-import UrlUtil from '../../util/Url';
-import { applyTransform } from 'ol/extent';
+import Projection from "ol/proj/Projection";
+import { getTransform, transform } from "ol/proj";
+import UrlUtil from "../../util/Url";
+import { applyTransform } from "ol/extent";
 
 /**
  * Class holding the logic for permalinks.
@@ -14,13 +14,15 @@ export default class PermalinkController {
   conf = null;
   urlParams = null;
 
-  constructor (map, permalinkConf) {
+  constructor(map, permalinkConf) {
     this.map = map;
     this.conf = permalinkConf || {};
-    this.projection = this.conf.projection ? new Projection({ code: this.conf.projection }) : null;
-    this.conf.paramPrefix = this.conf.paramPrefix || '';
-    this.conf.location = this.conf.location || 'hash';
-    this.conf.separator = this.conf.location === 'hash' ? '#' : '?';
+    this.projection = this.conf.projection
+      ? new Projection({ code: this.conf.projection })
+      : null;
+    this.conf.paramPrefix = this.conf.paramPrefix || "";
+    this.conf.location = this.conf.location || "hash";
+    this.conf.separator = this.conf.location === "hash" ? "#" : "?";
     this.conf.history = this.conf.history ? this.conf.history : false;
     this.conf.extent = this.conf.extent ? this.conf.extent : false;
     this.conf.layers = this.conf.layers ? this.conf.layers : false;
@@ -34,11 +36,11 @@ export default class PermalinkController {
    * Registers a 'moveend' event to update the permalink
    * 'hoverAttribute' if the layer is configured as 'hoverable'
    */
-  setup () {
+  setup() {
     this.shouldUpdate = true;
 
     // Listen to map state changes (pan, zoom)
-    this.map.on('moveend', () => {
+    this.map.on("moveend", () => {
       this.onMapChange();
     });
 
@@ -46,7 +48,7 @@ export default class PermalinkController {
     this.subscribeLayers();
 
     // Listen to Layer Collection (dynamically Layers added/removed)
-    this.map.getLayers().on('change:length', () => {
+    this.map.getLayers().on("change:length", () => {
       this.subscribeLayers();
     });
 
@@ -56,7 +58,7 @@ export default class PermalinkController {
 
     // restore the view state when navigating through the history (browser back/forward buttons), see
     // https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onpopstate
-    window.addEventListener('popstate', (event) => {
+    window.addEventListener("popstate", (event) => {
       if (event.state === null || this.map === null) {
         return;
       }
@@ -80,7 +82,7 @@ export default class PermalinkController {
       view.setZoom(state.zoom);
 
       if (this.conf.layers) {
-        this.applyLayers(new Map(state.layers.map(lid => [lid, lid])));
+        this.applyLayers(new Map(state.layers.map((lid) => [lid, lid])));
       }
     });
   }
@@ -88,7 +90,7 @@ export default class PermalinkController {
   /**
    * Stop this instance.
    */
-  tearDown () {
+  tearDown() {
     this.unsubscribeLayers();
     this.map = null;
   }
@@ -96,7 +98,7 @@ export default class PermalinkController {
   /**
    * Subscribe to Layer visibility changes.
    */
-  subscribeLayers () {
+  subscribeLayers() {
     if (!this.map) {
       return;
     }
@@ -105,7 +107,7 @@ export default class PermalinkController {
 
     // Listen to each Layer's visibility changes.
     this.map.getLayers().forEach((layer) => {
-      const key = layer.on('change:visible', () => {
+      const key = layer.on("change:visible", () => {
         this.onMapChange();
       });
       this.layerListeners.push({ key: key, layer: layer });
@@ -115,13 +117,13 @@ export default class PermalinkController {
   /**
    * Unsubscribe to Layer visibility changes.
    */
-  unsubscribeLayers () {
+  unsubscribeLayers() {
     if (!this.map) {
       return;
     }
     // Listen to each Layer's visibility changes.
     this.layerListeners.forEach((item) => {
-      item.layer.un(item.key.type, item.key.listener)
+      item.layer.un(item.key.type, item.key.listener);
     });
     this.layerListeners = [];
   }
@@ -130,7 +132,7 @@ export default class PermalinkController {
    * Applies map (View) rotation, center+zoom-level or extent
    * from permalink params in current URL 'location'
    */
-  apply () {
+  apply() {
     const permalinkParams = UrlUtil.getParams(this.conf.location);
     const prefix = this.conf.paramPrefix;
     const mapView = this.map.getView();
@@ -146,12 +148,12 @@ export default class PermalinkController {
 
     // Both extent (bbox) or center+zoom supported.
     if (permalinkParams[e]) {
-      const extent = permalinkParams[e].split(',').map((n) => {
+      const extent = permalinkParams[e].split(",").map((n) => {
         return parseFloat(n);
       });
       this.applyExtent(extent);
     } else if (permalinkParams[c]) {
-      const center = permalinkParams[c].split(',').map((n) => {
+      const center = permalinkParams[c].split(",").map((n) => {
         return parseFloat(n);
       });
       this.applyCenter(center);
@@ -165,27 +167,29 @@ export default class PermalinkController {
 
     // Set layer(s) visible
     if (permalinkParams[l]) {
-      this.applyLayers(new Map(permalinkParams[l].split(',').map(lid => [lid, lid])));
+      this.applyLayers(
+        new Map(permalinkParams[l].split(",").map((lid) => [lid, lid]))
+      );
     }
   }
 
   /**
    * Make only the layers for given array of layer ids visible.
    */
-  applyLayers (layers) {
+  applyLayers(layers) {
     if (!layers) {
       return;
     }
     this.map.getLayers().forEach((layer) => {
-      const layerId = layer.get('lid');
+      const layerId = layer.get("lid");
       layer.setVisible(layerId === layers.get(layerId));
-    })
+    });
   }
 
   /**
    * Position map at provided center.
    */
-  applyCenter (center) {
+  applyCenter(center) {
     if (!center) {
       return;
     }
@@ -193,7 +197,7 @@ export default class PermalinkController {
 
     // Permalink coordinates may have specific Projection like WGS84
     if (this.projection) {
-      center = transform(center, this.projection, mapView.getProjection())
+      center = transform(center, this.projection, mapView.getProjection());
     }
 
     mapView.setCenter(center);
@@ -202,14 +206,17 @@ export default class PermalinkController {
   /**
    * Position map at provided map extent.
    */
-  applyExtent (extent) {
+  applyExtent(extent) {
     if (!extent) {
       return;
     }
     const mapView = this.map.getView();
     // Permalink coordinates may have specific Projection like WGS84
     if (this.projection) {
-      extent = applyTransform(extent, getTransform(this.projection, mapView.getProjection()))
+      extent = applyTransform(
+        extent,
+        getTransform(this.projection, mapView.getProjection())
+      );
     }
 
     // Fit the map in extent
@@ -219,9 +226,9 @@ export default class PermalinkController {
   /**
    * Get the URL parameter permalink string as query or hash.
    */
-  getParamStr () {
+  getParamStr() {
     const round = (num, places) => {
-      return +(Math.round(num + 'e+' + places) + 'e-' + places);
+      return +(Math.round(num + "e+" + places) + "e-" + places);
     };
 
     const state = this.getState();
@@ -231,14 +238,18 @@ export default class PermalinkController {
     // Use extent (bbox) or center+zoom based on config
     this.urlParams[`${prefix}z`] = `${round(state.zoom, prec)}`;
     if (this.conf.extent) {
-      this.urlParams[`${prefix}e`] = state.extent.map(n => round(n, prec)).join(',');
+      this.urlParams[`${prefix}e`] = state.extent
+        .map((n) => round(n, prec))
+        .join(",");
     } else {
-      this.urlParams[`${prefix}c`] = state.center.map(n => round(n, prec)).join(',');
+      this.urlParams[`${prefix}c`] = state.center
+        .map((n) => round(n, prec))
+        .join(",");
     }
     this.urlParams[`${prefix}r`] = `${round(state.rotation, prec)}`;
 
     if (this.conf.layers) {
-      this.urlParams[`${prefix}l`] = state.layers.join(',');
+      this.urlParams[`${prefix}l`] = state.layers.join(",");
     }
 
     return this.conf.separator + UrlUtil.toQueryString(this.urlParams);
@@ -247,32 +258,41 @@ export default class PermalinkController {
   /**
    * Get full URL with permalink string for sharing.
    */
-  getShareUrl () {
+  getShareUrl() {
     return location.href.split(this.conf.separator)[0] + this.getParamStr();
   }
 
   /**
    * Get (IFrame) code fragment for embedding the permalink in an HTML page.
    */
-  getEmbedHTML () {
+  getEmbedHTML() {
     const mapSize = this.map.getSize();
 
-    return `<iframe width="${mapSize[0]}" height="${mapSize[1]}" src="${this.getShareUrl()}" style="border:none;"></iframe>`;
+    return `<iframe width="${mapSize[0]}" height="${
+      mapSize[1]
+    }" src="${this.getShareUrl()}" style="border:none;"></iframe>`;
   }
 
   /**
    * Get array of visible and not ignored layer IDs.
    */
-  getLayerIds () {
-    return this.map.getLayers().getArray().filter(
-      layer => !!layer.get('lid') && layer.getVisible() && layer.get('supportsPermalink')
-    ).map(layer => layer.get('lid'));
+  getLayerIds() {
+    return this.map
+      .getLayers()
+      .getArray()
+      .filter(
+        (layer) =>
+          !!layer.get("lid") &&
+          layer.getVisible() &&
+          layer.get("supportsPermalink")
+      )
+      .map((layer) => layer.get("lid"));
   }
 
   /**
    * Get total State of the Map.
    */
-  getState () {
+  getState() {
     const mapView = this.map.getView();
     let center = mapView.getCenter();
     let extent = mapView.calculateExtent();
@@ -280,21 +300,24 @@ export default class PermalinkController {
     // Optionally reproject to permalink projection (e.g. WGS84 on WebMerc).
     if (this.projection) {
       center = transform(center, mapView.getProjection(), this.projection);
-      extent = applyTransform(extent, getTransform(mapView.getProjection(), this.projection));
+      extent = applyTransform(
+        extent,
+        getTransform(mapView.getProjection(), this.projection)
+      );
     }
     return {
       zoom: mapView.getZoom(),
       center: center,
       extent: extent,
       rotation: mapView.getRotation(),
-      layers: this.getLayerIds()
+      layers: this.getLayerIds(),
     };
   }
 
   /**
    * Callback when Map View has changed, e.g. 'moveend' or a Layer's visibility.
    */
-  onMapChange () {
+  onMapChange() {
     // console.log('mapchange');
     if (!this.shouldUpdate) {
       // do not update the URL when the view was changed in the 'popstate' handler
@@ -305,6 +328,6 @@ export default class PermalinkController {
       return;
     }
     // This changes the URL in address bar.
-    window.history.pushState(this.getState(), 'map', this.getParamStr());
+    window.history.pushState(this.getState(), "map", this.getParamStr());
   }
 }

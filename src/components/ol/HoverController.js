@@ -1,14 +1,14 @@
-import TileWmsSource from 'ol/source/TileWMS';
-import ImageWMSSource from 'ol/source/ImageWMS';
-import VectorSource from 'ol/source/Vector';
-import VectorTileSource from 'ol/source/VectorTile'
-import WMSGetFeatureInfo from 'ol/format/WMSGetFeatureInfo';
-import { WguEventBus } from '../../WguEventBus'
-import axios from 'axios';
+import TileWmsSource from "ol/source/TileWMS";
+import ImageWMSSource from "ol/source/ImageWMS";
+import VectorSource from "ol/source/Vector";
+import VectorTileSource from "ol/source/VectorTile";
+import WMSGetFeatureInfo from "ol/format/WMSGetFeatureInfo";
+import { WguEventBus } from "../../WguEventBus";
+import axios from "axios";
 
 export default class HoverController {
   DEFAULT_POINTER_REST_INTERVAL = 150;
-  DEFAULT_HOVER_OVERLAY = 'wgu-hover-tooltip'
+  DEFAULT_HOVER_OVERLAY = "wgu-hover-tooltip";
 
   map = null;
   timerHandle = null;
@@ -25,14 +25,14 @@ export default class HoverController {
    * @param {ol.Map} map OpenLayers map.
    * @param {Number} pointerRestInterval Timespan in milliseconds, by which displaying the tooltip is deferred.
    */
-  constructor (map, pointerRestInterval) {
+  constructor(map, pointerRestInterval) {
     const me = this;
     me.map = map;
 
     // To limit the amount of asynchronous requests, implement a "pointer rest" behavior,
     // which will potentially show a tooltip after the mouse has not moved for a given time period.
     const timeout = pointerRestInterval ?? me.DEFAULT_POINTER_REST_INTERVAL;
-    map.on('pointermove', (event) => {
+    map.on("pointermove", (event) => {
       if (me.timerHandle) {
         clearTimeout(me.timerHandle);
       }
@@ -45,7 +45,7 @@ export default class HoverController {
   /**
    * Tears down this controller.
    */
-  destroy () {
+  destroy() {
     const me = this;
 
     if (me.timerHandle) {
@@ -59,7 +59,7 @@ export default class HoverController {
     }
 
     if (me.activeOverlayId) {
-      WguEventBus.$emit(me.activeOverlayId + '-update-overlay', false);
+      WguEventBus.$emit(me.activeOverlayId + "-update-overlay", false);
       me.activeOverlayId = null;
     }
 
@@ -72,7 +72,7 @@ export default class HoverController {
    * only the first detected feature is displayed.
    * @param  {Object} event The OL event for pointermove
    */
-  onPointerRest (event) {
+  onPointerRest(event) {
     const me = this;
     const map = me.map;
     const pixel = event.pixel;
@@ -90,31 +90,43 @@ export default class HoverController {
 
     // Acquire features for all layers.
     map.forEachLayerAtPixel(pixel, (layer) => {
-      if (!layer.get('hoverable')) {
+      if (!layer.get("hoverable")) {
         return;
       }
       const source = layer.getSource();
       if (source instanceof TileWmsSource || source instanceof ImageWMSSource) {
         resetTooltip = false;
-        me.getWMSFeaturesAsync(map, layer, coordinate, me.pendingRequestsCancelSrc)
+        me.getWMSFeaturesAsync(
+          map,
+          layer,
+          coordinate,
+          me.pendingRequestsCancelSrc
+        )
           .then(function (features) {
-            featureInfos.push(...features.map((feat) => {
-              return { layer: layer, feature: feat };
-            }));
-            me.displayTooltip(featureInfos, coordinate)
+            featureInfos.push(
+              ...features.map((feat) => {
+                return { layer: layer, feature: feat };
+              })
+            );
+            me.displayTooltip(featureInfos, coordinate);
           })
           .catch(function (error) {
             if (!axios.isCancel(error)) {
               console.error(error.message);
             }
-          })
-      } else if (source instanceof VectorSource || source instanceof VectorTileSource) {
+          });
+      } else if (
+        source instanceof VectorSource ||
+        source instanceof VectorTileSource
+      ) {
         resetTooltip = false;
         const features = me.getVectorFeatures(map, layer, pixel);
-        featureInfos.push(...features.map((feat) => {
-          return { layer: layer, feature: feat };
-        }));
-        me.displayTooltip(featureInfos, coordinate)
+        featureInfos.push(
+          ...features.map((feat) => {
+            return { layer: layer, feature: feat };
+          })
+        );
+        me.displayTooltip(featureInfos, coordinate);
       }
     });
     if (resetTooltip) {
@@ -129,11 +141,11 @@ export default class HoverController {
    * @param {ol.pixel} pixel The pixel on the viewport.
    * @returns {Array<ol.Feature>}
    */
-  getVectorFeatures (map, layer, pixel) {
+  getVectorFeatures(map, layer, pixel) {
     const features = map.getFeaturesAtPixel(pixel, {
       layerFilter: (layerCand) => {
         return layerCand === layer;
-      }
+      },
     });
     return features;
   }
@@ -146,32 +158,34 @@ export default class HoverController {
    * @param {axios.CancelTokenSource} cancelTokenSrc An optional cancel token to abort the request.
    * @returns {Promise<Array<ol.Feature>>}
    */
-  getWMSFeaturesAsync (map, layer, coordinate, cancelTokenSrc) {
+  getWMSFeaturesAsync(map, layer, coordinate, cancelTokenSrc) {
     const view = map.getView();
     return new Promise((resolve, reject) => {
-      const url = layer.getSource().getFeatureInfoUrl(
-        coordinate,
-        view.getResolution(),
-        view.getProjection(),
-        {
-          INFO_FORMAT: 'application/vnd.ogc.gml/3.1.1'
-        }
-      );
+      const url = layer
+        .getSource()
+        .getFeatureInfoUrl(
+          coordinate,
+          view.getResolution(),
+          view.getProjection(),
+          {
+            INFO_FORMAT: "application/vnd.ogc.gml/3.1.1",
+          }
+        );
       if (!url) {
-        reject(new Error('URL is undefined'));
+        reject(new Error("URL is undefined"));
       }
 
       const request = {
-        method: 'GET',
+        method: "GET",
         url: url,
-        cancelToken: cancelTokenSrc?.token
+        cancelToken: cancelTokenSrc?.token,
       };
       axios(request)
-        .then(response => {
+        .then((response) => {
           const features = new WMSGetFeatureInfo().readFeatures(response.data);
           resolve(features);
         })
-        .catch(error => {
+        .catch((error) => {
           reject(error);
         });
     });
@@ -183,12 +197,12 @@ export default class HoverController {
    * @param {Array} featureInfos List of features with their respective layers.
    * @param {*} coordinate Coordinate in map projection of the mouse cursor.
    */
-  displayTooltip (featureInfos, coordinate) {
+  displayTooltip(featureInfos, coordinate) {
     const me = this;
 
     if (!featureInfos || featureInfos.length === 0) {
       if (me.activeOverlayId) {
-        WguEventBus.$emit(me.activeOverlayId + '-update-overlay', false);
+        WguEventBus.$emit(me.activeOverlayId + "-update-overlay", false);
         me.activeOverlayId = null;
       }
       return;
@@ -197,15 +211,15 @@ export default class HoverController {
     const featureInfo = featureInfos[0];
     const feature = featureInfo.feature;
     const layer = featureInfo.layer;
-    const hoverAttr = layer.get('hoverAttribute');
-    const overlayId = layer.get('hoverOverlay') || me.DEFAULT_HOVER_OVERLAY;
+    const hoverAttr = layer.get("hoverAttribute");
+    const overlayId = layer.get("hoverOverlay") || me.DEFAULT_HOVER_OVERLAY;
 
     if (me.activeOverlayId !== overlayId) {
-      WguEventBus.$emit(me.activeOverlayId + '-update-overlay', false);
-    };
-    WguEventBus.$emit(overlayId + '-update-overlay', true, coordinate, {
+      WguEventBus.$emit(me.activeOverlayId + "-update-overlay", false);
+    }
+    WguEventBus.$emit(overlayId + "-update-overlay", true, coordinate, {
       feature: feature,
-      hoverAttribute: hoverAttr
+      hoverAttribute: hoverAttr,
     });
     me.activeOverlayId = overlayId;
   }

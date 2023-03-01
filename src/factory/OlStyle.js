@@ -1,5 +1,11 @@
-import { Circle as CircleStyle, Icon as IconStyle, Fill, Stroke, Style, Text }
-  from 'ol/style';
+import {
+  Circle as CircleStyle,
+  Icon as IconStyle,
+  Fill,
+  Stroke,
+  Style,
+  Text,
+} from "ol/style";
 
 /**
  * Factory, which creates OpenLayers style instances according to a given config
@@ -10,14 +16,13 @@ import { Circle as CircleStyle, Icon as IconStyle, Fill, Stroke, Style, Text }
  * GeoStyler<https://github.com/terrestris/geostyler>
  */
 export const OlStyleFactory = {
-
   /**
    * Returns an OpenLayers Style instance due to given config.
    *
    * @param  {Object} styleConf  Style config object
    * @return {Style}             OL Style instance
    */
-  getInstance (styleConf) {
+  getInstance(styleConf) {
     let style;
     if (!styleConf) {
       return;
@@ -29,8 +34,11 @@ export const OlStyleFactory = {
       style = OlStyleFactory.createLineStyle(styleConf);
     }
 
-    if (styleConf.label && styleConf.label.attribute &&
-        styleConf.label.attribute !== '') {
+    if (
+      styleConf.label &&
+      styleConf.label.attribute &&
+      styleConf.label.attribute !== ""
+    ) {
       // use an OL style function to enable labels
       return OlStyleFactory.getTextStyleFunction(style, styleConf.label);
     }
@@ -44,33 +52,33 @@ export const OlStyleFactory = {
    * @param  {Object} styleConf  Style config object
    * @return {Style}             OL style instance
    */
-  createPointStyle (styleConf) {
+  createPointStyle(styleConf) {
     let pointStyle;
     if (styleConf.iconUrl) {
       pointStyle = new Style({
-        image: new IconStyle(({
+        image: new IconStyle({
           src: styleConf.iconUrl,
           scale: styleConf.scale || 1,
           anchor: styleConf.iconAnchor,
           anchorXUnits: styleConf.iconAnchorXUnits,
-          anchorYUnits: styleConf.iconAnchorYUnits
-        }))
-      })
+          anchorYUnits: styleConf.iconAnchorYUnits,
+        }),
+      });
     } else if (styleConf.radius) {
       pointStyle = new Style({
         image: new CircleStyle({
           radius: styleConf.radius,
           fill: OlStyleFactory.createFill(styleConf),
-          stroke: OlStyleFactory.createStroke(styleConf)
-        })
+          stroke: OlStyleFactory.createStroke(styleConf),
+        }),
       });
     } else {
       pointStyle = new Style({
         text: new Text({
           text: styleConf.textIcon,
-          font: styleConf.font || 'normal 30px Material Icons',
-          fill: OlStyleFactory.createFill(styleConf)
-        })
+          font: styleConf.font || "normal 30px Material Icons",
+          fill: OlStyleFactory.createFill(styleConf),
+        }),
       });
     }
 
@@ -83,9 +91,9 @@ export const OlStyleFactory = {
    * @param  {Object} styleConf  Style config object
    * @return {Style}             OL style instance
    */
-  createLineStyle (styleConf) {
+  createLineStyle(styleConf) {
     const olStyle = new Style({
-      stroke: OlStyleFactory.createStroke(styleConf)
+      stroke: OlStyleFactory.createStroke(styleConf),
     });
 
     return olStyle;
@@ -97,7 +105,7 @@ export const OlStyleFactory = {
    * @param  {Object} styleConf  Style config object
    * @return {Style}             OL style instance
    */
-  createPolygonStyle (styleConf) {
+  createPolygonStyle(styleConf) {
     const olStyle = OlStyleFactory.createLineStyle(styleConf);
     olStyle.setFill(OlStyleFactory.createFill(styleConf));
 
@@ -110,10 +118,10 @@ export const OlStyleFactory = {
    * @param  {Object} styleConf Style config object
    * @return {Stroke}           OL Stroke instance
    */
-  createStroke (styleConf) {
+  createStroke(styleConf) {
     return new Stroke({
       color: styleConf.strokeColor,
-      width: styleConf.strokeWidth
+      width: styleConf.strokeWidth,
     });
   },
 
@@ -123,9 +131,9 @@ export const OlStyleFactory = {
    * @param  {Object} styleConf Style config object
    * @return {Fill}             OL Fill instance
    */
-  createFill (styleConf) {
+  createFill(styleConf) {
     return new Fill({
-      color: styleConf.fillColor
+      color: styleConf.fillColor,
     });
   },
 
@@ -135,14 +143,14 @@ export const OlStyleFactory = {
    * @param {Object} labelConf Style config object for labels
    * @returns {ol/style/Text} The OL style object for texts
    */
-  getTextStyle (labelConf) {
+  getTextStyle(labelConf) {
     // create a clone to avoid unwanted in place modification
     const textConf = { ...labelConf };
 
     textConf.fill = new Fill({ color: textConf.fillColor });
     textConf.stroke = new Stroke({
       color: textConf.outlineColor,
-      width: textConf.outlineWidth
+      width: textConf.outlineWidth,
     });
 
     const textStyle = new Text(textConf);
@@ -159,7 +167,7 @@ export const OlStyleFactory = {
    * @returns {ol/style/Style~StyleFunction}
    *    Style function returning the OL style object enriched by texts / labels
    */
-  getTextStyleFunction (style, labelStyleConf) {
+  getTextStyleFunction(style, labelStyleConf) {
     const labelStyle = OlStyleFactory.getTextStyle(labelStyleConf);
     const labelAttr = labelStyleConf.attribute;
     return (feature, resolution) => {
@@ -177,7 +185,6 @@ export const OlStyleFactory = {
       }
 
       return style;
-    }
-  }
-
-}
+    };
+  },
+};

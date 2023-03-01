@@ -1,5 +1,4 @@
 {
-
   "colorTheme": {
     "dark": false,
     "themes": {
@@ -26,7 +25,6 @@
   "mapCenter": [0, 0],
 
   "mapLayers": [
-
     {
       "type": "TILEWMS",
       "lid": "terrestris-osm-wms",
@@ -38,7 +36,6 @@
       "isBaseLayer": true,
       "visible": true
     }
-
   ],
 
   "modules": {
@@ -48,5 +45,4 @@
       "icon": "help"
     }
   }
-
 }

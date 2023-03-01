@@ -1,15 +1,14 @@
-import ObjectUtil from './Object.js'
-import UrlUtil from './Url.js';
+import ObjectUtil from "./Object.js";
+import UrlUtil from "./Url.js";
 
 /**
  * Locale related utility methods.
  */
 const LocaleUtil = {
-
   /**
    * Hardcoded fallback if no supported languages are declared in app config.
    */
-  supportedLanguageFallback: { en: 'English' },
+  supportedLanguageFallback: { en: "English" },
 
   /**
    * Import a webpack context for language files and returns message content.
@@ -18,14 +17,14 @@ const LocaleUtil = {
    *
    * @returns {Object} A container with message data. Key is the language code, value contains the messages.
    */
-  importLocales (context, mappingFunc) {
+  importLocales(context, mappingFunc) {
     return context
       .keys()
       .map((key) => ({ key, locale: key.match(/[a-z0-9-_]+/i)[0] }))
       .reduce(
         (messages, { key, locale }) => ({
           ...messages,
-          [locale]: mappingFunc(context(key))
+          [locale]: mappingFunc(context(key)),
         }),
         {}
       );
@@ -38,23 +37,23 @@ const LocaleUtil = {
    *
    * @returns  {Object} A container with message data. Key is the language code, value contains the messages.
    */
-  importVueI18nLocales () {
-    const jsonContentExtractor = i => i;
+  importVueI18nLocales() {
+    const jsonContentExtractor = (i) => i;
 
     // Load Wegue core language files.
     const i18nMessages = LocaleUtil.importLocales(
-      require.context('../locales', true, /[a-z0-9-_]+\.json$/i),
+      require.context("../locales", true, /[a-z0-9-_]+\.json$/i),
       jsonContentExtractor
     );
 
     // Try to load optional app specific language files and merge contents.
     try {
       const i18nMessagesApp = LocaleUtil.importLocales(
-        require.context('../../app/locales', true, /[a-z0-9-_]+\.json$/i),
-        jsonContentExtractor);
+        require.context("../../app/locales", true, /[a-z0-9-_]+\.json$/i),
+        jsonContentExtractor
+      );
       ObjectUtil.mergeDeep(i18nMessages, i18nMessagesApp);
-    } catch (e) {
-    }
+    } catch (e) {}
 
     return i18nMessages;
   },
@@ -64,45 +63,45 @@ const LocaleUtil = {
    *
    * @returns A container with message data. Key is the language code, value contains the messages.
    */
-  importVuetifyLocales () {
-    const moduleDefaultExtractor = i => i.default;
+  importVuetifyLocales() {
+    const moduleDefaultExtractor = (i) => i.default;
 
     return LocaleUtil.importLocales(
-      require.context('vuetify/es5/locale', false, /[a-z0-9-_]+\.js$/i),
+      require.context("vuetify/es5/locale", false, /[a-z0-9-_]+\.js$/i),
       moduleDefaultExtractor
     );
   },
 
   /**
-  * Detects the preferred language which is supported by the application
-  * and returns the language code.
-  * Priority order:
-  * 1. URL-parameter
-  * 2. Preferred browser language
-  * 3. One of the accepted browser languages
-  * 4. The fallback language declared in appConfig
-  * 5. The fallback language declared above
-  *
-  * @param {Object} appConfig Global application context.
-  * @returns The language code of the preferred language.
-  */
-  getPreferredLanguage (appConfig) {
+   * Detects the preferred language which is supported by the application
+   * and returns the language code.
+   * Priority order:
+   * 1. URL-parameter
+   * 2. Preferred browser language
+   * 3. One of the accepted browser languages
+   * 4. The fallback language declared in appConfig
+   * 5. The fallback language declared above
+   *
+   * @param {Object} appConfig Global application context.
+   * @returns The language code of the preferred language.
+   */
+  getPreferredLanguage(appConfig) {
     const precedence = [
-      UrlUtil.getQueryParam('lang'),
+      UrlUtil.getQueryParam("lang"),
       navigator.language || navigator.userLanguage,
       ...navigator.languages,
       LocaleUtil.getFallbackLanguage(appConfig),
-      Object.keys(LocaleUtil.supportedLanguageFallback)[0]
+      Object.keys(LocaleUtil.supportedLanguageFallback)[0],
     ];
 
     // Transform codes like 'de-DE' or 'en-GB' to 'de' or 'en'.
     const languages = precedence
-      .filter(value => !!value)
-      .map(value => {
+      .filter((value) => !!value)
+      .map((value) => {
         return value ? value.trim().split(/-|_/)[0] : null;
       });
 
-    return languages.find(value => {
+    return languages.find((value) => {
       return LocaleUtil.isLanguageSupported(value, appConfig);
     });
   },
@@ -115,12 +114,14 @@ const LocaleUtil = {
    * @returns {Object} A container with key value pairs, while key corresponds to the language code and
    *  value contains a human readable language name.
    */
-  getSupportedLanguages (appConfig) {
+  getSupportedLanguages(appConfig) {
     const isDefined =
       appConfig.lang &&
       appConfig.lang.supported &&
       Object.keys(appConfig.lang.supported).length > 0;
-    return isDefined ? appConfig.lang.supported : LocaleUtil.supportedLanguageFallback;
+    return isDefined
+      ? appConfig.lang.supported
+      : LocaleUtil.supportedLanguageFallback;
   },
 
   /**
@@ -130,11 +131,11 @@ const LocaleUtil = {
    * @param {Object} appConfig Global application context.
    * @returns {String} The language code of the fallback language.
    */
-  getFallbackLanguage (appConfig) {
-    const isDefined =
-      appConfig.lang &&
-      appConfig.lang.fallback;
-    return isDefined ? appConfig.lang.fallback : Object.keys(LocaleUtil.supportedLanguageFallback)[0]
+  getFallbackLanguage(appConfig) {
+    const isDefined = appConfig.lang && appConfig.lang.fallback;
+    return isDefined
+      ? appConfig.lang.fallback
+      : Object.keys(LocaleUtil.supportedLanguageFallback)[0];
   },
 
   /**
@@ -144,10 +145,10 @@ const LocaleUtil = {
    * @param {Object} appConfig Global application context.
    * @returns {Boolean} True if the language code is supported by the application.
    */
-  isLanguageSupported (code, appConfig) {
+  isLanguageSupported(code, appConfig) {
     const supported = LocaleUtil.getSupportedLanguages(appConfig);
     return Object.keys(supported).includes(code);
-  }
-}
+  },
+};
 
 export default LocaleUtil;

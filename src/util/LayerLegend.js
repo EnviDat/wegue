@@ -2,9 +2,9 @@
  * Implements URL parametrization to obtain legend images for layers.
  */
 
-import TileWmsSource from 'ol/source/TileWMS';
-import ImageWmsSource from 'ol/source/ImageWMS';
-import Vue from 'vue';
+import TileWmsSource from "ol/source/TileWMS";
+import ImageWmsSource from "ol/source/ImageWMS";
+import Vue from "vue";
 
 const CustomLegend = {
   /**
@@ -16,7 +16,7 @@ const CustomLegend = {
    * @param {String} formatUrl  A custom format URL.
    * @returns {String} The legend URL.
    */
-  getUrl (source, resolution, options, formatUrl) {
+  getUrl(source, resolution, options, formatUrl) {
     let url = formatUrl;
     const placeholders = options || {};
 
@@ -30,12 +30,12 @@ const CustomLegend = {
     }
 
     for (const key in placeholders) {
-      const regex = new RegExp('{{' + key + '}}', 'gi');
+      const regex = new RegExp("{{" + key + "}}", "gi");
       url = url.replace(regex, placeholders[key]);
     }
     return url;
-  }
-}
+  },
+};
 
 const WMSSourceLegend = {
   /**
@@ -45,10 +45,10 @@ const WMSSourceLegend = {
    * @param {Object} options Optional configuration params.
    * @returns {String} The legend URL.
    */
-  getUrl (source, resolution, options) {
+  getUrl(source, resolution, options) {
     return source.getLegendUrl(resolution, options);
-  }
-}
+  },
+};
 
 const LayerLegend = {
   /**
@@ -57,11 +57,11 @@ const LayerLegend = {
    * @param {Object} options Optional configuration params.
    * @returns {Object} Merged configuration params.
    */
-  getOptions (options) {
+  getOptions(options) {
     const appConfig = Vue.prototype.$appConfig;
     return {
       ...appConfig?.legend,
-      ...options
+      ...options,
     };
   },
 
@@ -73,7 +73,7 @@ const LayerLegend = {
    * @param {String} formatUrl A custom format URL.
    * @returns {String} Legend URL or undefined if no legend can be produced.
    */
-  getUrl (layer, resolution, options, formatUrl) {
+  getUrl(layer, resolution, options, formatUrl) {
     const opts = this.getOptions(options);
     const source = layer.getSource();
 
@@ -88,15 +88,12 @@ const LayerLegend = {
     }
 
     // For WMS based sources, use the in-built legend URL formatter.
-    if (
-      source instanceof TileWmsSource ||
-      source instanceof ImageWmsSource
-    ) {
+    if (source instanceof TileWmsSource || source instanceof ImageWmsSource) {
       return WMSSourceLegend.getUrl(source, resolution, opts);
     }
 
     return undefined;
-  }
-}
+  },
+};
 
 export default LayerLegend;

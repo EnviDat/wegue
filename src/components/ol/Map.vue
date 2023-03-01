@@ -3,43 +3,39 @@
 </template>
 
 <script>
-
-import Vue from 'vue';
-import Map from 'ol/Map'
-import View from 'ol/View'
-import Attribution from 'ol/control/Attribution';
-import Zoom from 'ol/control/Zoom';
-import {
-  DragAndDrop,
-  defaults as defaultInteractions
-} from 'ol/interaction';
-import RotateControl from 'ol/control/Rotate';
-import Projection from 'ol/proj/Projection';
-import TileGrid from 'ol/tilegrid/TileGrid';
-import { register as olproj4 } from 'ol/proj/proj4';
-import { get as getProj } from 'ol/proj';
-import { GPX, GeoJSON, IGC, KML, TopoJSON } from 'ol/format';
-import { Vector as VectorLayer } from 'ol/layer';
-import { Vector as VectorSource } from 'ol/source';
-import proj4 from 'proj4'
+import Vue from "vue";
+import Map from "ol/Map";
+import View from "ol/View";
+import Attribution from "ol/control/Attribution";
+import Zoom from "ol/control/Zoom";
+import { DragAndDrop, defaults as defaultInteractions } from "ol/interaction";
+import RotateControl from "ol/control/Rotate";
+import Projection from "ol/proj/Projection";
+import TileGrid from "ol/tilegrid/TileGrid";
+import { register as olproj4 } from "ol/proj/proj4";
+import { get as getProj } from "ol/proj";
+import { GPX, GeoJSON, IGC, KML, TopoJSON } from "ol/format";
+import { Vector as VectorLayer } from "ol/layer";
+import { Vector as VectorSource } from "ol/source";
+import proj4 from "proj4";
 // import the app-wide EventBus
-import { WguEventBus } from '../../WguEventBus.js';
-import { LayerFactory } from '../../factory/Layer.js';
-import LayerUtil from '../../util/Layer';
-import PermalinkController from './PermalinkController';
-import HoverController from './HoverController';
-import MapInteractionUtil from '../../util/MapInteraction';
-import ViewAnimationUtil from '../../util/ViewAnimation';
-import { ColorTheme } from '../../mixins/ColorTheme'
+import { WguEventBus } from "../../WguEventBus.js";
+import { LayerFactory } from "../../factory/Layer.js";
+import LayerUtil from "../../util/Layer";
+import PermalinkController from "./PermalinkController";
+import HoverController from "./HoverController";
+import MapInteractionUtil from "../../util/MapInteraction";
+import ViewAnimationUtil from "../../util/ViewAnimation";
+import { ColorTheme } from "../../mixins/ColorTheme";
 
 export default {
-  name: 'wgu-map',
+  name: "wgu-map",
   mixins: [ColorTheme],
   props: {
     collapsibleAttribution: { type: Boolean, default: false },
-    rotateableMap: { type: Boolean, required: false, default: false }
+    rotateableMap: { type: Boolean, required: false, default: false },
   },
-  data () {
+  data() {
     return {
       zoom: this.$appConfig.mapZoom,
       center: this.$appConfig.mapCenter,
@@ -56,12 +52,12 @@ export default {
         GeoJSON: GeoJSON,
         IGC: IGC,
         KML: KML,
-        TopoJSON: TopoJSON
+        TopoJSON: TopoJSON,
       },
-      dragDropLayerCreated: false
-    }
+      dragDropLayerCreated: false,
+    };
   },
-  mounted () {
+  mounted() {
     const me = this;
     // Make the OL map accessible for Mapable mixin even 'ol-map-mounted' has
     // already been fired. Don not use directly in cmps, use Mapable instead.
@@ -70,7 +66,7 @@ export default {
     // Set the target for the OL canvas and tie it`s size to ol-map-container.
     // Remarks: 'ol-map-container' does not exist in the scope of the current unit test,
     // therefore flag the initialization to prevent errors.
-    const container = document.getElementById('ol-map-container');
+    const container = document.getElementById("ol-map-container");
     if (container) {
       me.map.setTarget(container);
 
@@ -81,7 +77,7 @@ export default {
     }
 
     // Send the event 'ol-map-mounted' with the OL map as payload
-    WguEventBus.$emit('ol-map-mounted', me.map);
+    WguEventBus.$emit("ol-map-mounted", me.map);
 
     // TODO
     //  Re-evaluate whether and if yes which of the following operations have to be deferred.
@@ -92,9 +88,9 @@ export default {
       me.setOlButtonColor();
     }, 200);
   },
-  destroyed () {
+  destroyed() {
     // Send the event 'ol-map-unmounted' with the OL map as payload
-    WguEventBus.$emit('ol-map-unmounted', this.map);
+    WguEventBus.$emit("ol-map-unmounted", this.map);
 
     // Destroy controllers, remove map references
     if (this.timerHandle) {
@@ -116,11 +112,11 @@ export default {
     }
     this.map = undefined;
   },
-  created () {
+  created() {
     // make map rotateable according to property
     const interactions = defaultInteractions({
       altShiftDragRotate: this.rotateableMap,
-      pinchRotate: this.rotateableMap
+      pinchRotate: this.rotateableMap,
     });
 
     // add geodata drag-drop support according to config
@@ -132,8 +128,8 @@ export default {
     const controls = [
       new Zoom(),
       new Attribution({
-        collapsible: this.collapsibleAttribution
-      })
+        collapsible: this.collapsibleAttribution,
+      }),
     ];
     // add a button control to reset rotation to 0, if map is rotateable
     if (this.rotateableMap) {
@@ -151,13 +147,13 @@ export default {
     // Projection for map, default is Web Mercator
     let projection;
     if (!this.projection) {
-      projection = getProj('EPSG:3857');
+      projection = getProj("EPSG:3857");
     } else {
       projection = new Projection(this.projection);
     }
 
     // Optional TileGrid definitions by name, for ref in Layers
-    Object.keys(this.tileGridDefs).forEach(name => {
+    Object.keys(this.tileGridDefs).forEach((name) => {
       this.tileGrids[name] = new TileGrid(this.tileGridDefs[name]);
     });
 
@@ -168,8 +164,8 @@ export default {
       view: new View({
         center: this.center,
         zoom: this.zoom,
-        projection: projection
-      })
+        projection: projection,
+      }),
     });
 
     // create layers from config and add them to map
@@ -181,7 +177,7 @@ export default {
 
     if (this.$appConfig.permalink) {
       this.permalinkController = this.createPermalinkController();
-      this.map.set('permalinkcontroller', this.permalinkController, true);
+      this.map.set("permalinkcontroller", this.permalinkController, true);
       this.permalinkController.apply();
       this.permalinkController.setup();
     }
@@ -192,7 +188,7 @@ export default {
      * Creates the OL layers due to the "mapLayers" array in app config.
      * @return {ol.layer.Base[]} Array of OL layer instances
      */
-    createLayers () {
+    createLayers() {
       const me = this;
       const layers = [];
       const appConfig = this.$appConfig;
@@ -201,7 +197,9 @@ export default {
         // Some Layers may require a TileGrid object
         // Remarks: Passing null instead of undefined as parameters into the
         //  constructor of OpenLayers sources overwrites OpenLayers defaults.
-        lConf.tileGrid = lConf.tileGridRef ? me.tileGrids[lConf.tileGridRef] : undefined;
+        lConf.tileGrid = lConf.tileGridRef
+          ? me.tileGrids[lConf.tileGridRef]
+          : undefined;
 
         // Automatically set the appropriate z-index for the layer type,
         // if not defined explicitly.
@@ -219,7 +217,7 @@ export default {
             layer,
             lConf.selectStyle,
             lConf.doAppendSelectStyle
-          )
+          );
           // register/activate interaction on map
           me.map.addInteraction(selectClick);
         }
@@ -232,17 +230,17 @@ export default {
      * Hook up events to process newly added and modified OL layers.
      * This is currently used to update locale specific layer properties.
      */
-    registerLayerEvents () {
+    registerLayerEvents() {
       const layers = this.map.getLayers();
-      layers.on('add', evt => {
+      layers.on("add", (evt) => {
         const layer = evt.element;
         this.updateLocalizedLayerProps(evt.element);
-        layer.on('propertychange', evt => {
-          if (evt.key === 'lid' || evt.key === 'langKey') {
-            this.updateLocalizedLayerProps(evt.target)
+        layer.on("propertychange", (evt) => {
+          if (evt.key === "lid" || evt.key === "langKey") {
+            this.updateLocalizedLayerProps(evt.target);
           }
-        })
-      })
+        });
+      });
     },
 
     /**
@@ -250,7 +248,7 @@ export default {
      *
      * @return {HoverController} HoverController instance.
      */
-    createHoverController () {
+    createHoverController() {
       return new HoverController(this.map);
     },
 
@@ -259,32 +257,34 @@ export default {
      *
      * @return {PermalinkController} PermalinkController instance.
      */
-    createPermalinkController () {
+    createPermalinkController() {
       return new PermalinkController(this.map, this.$appConfig.permalink);
     },
 
     /**
      * Sets the background color of the OL buttons to the color property.
      */
-    setOlButtonColor () {
-      const colors = 'secondary onsecondary--text'
+    setOlButtonColor() {
+      const colors = "secondary onsecondary--text";
 
       // apply vuetify color by transforming the color to the corresponding
       // CSS class (see https://vuetifyjs.com/en/framework/colors)
-      const classes = colors.toString().trim().split(' ');
+      const classes = colors.toString().trim().split(" ");
 
       // zoom
-      if (document.querySelector('.ol-zoom')) {
+      if (document.querySelector(".ol-zoom")) {
         classes.forEach(function (c) {
-          document.querySelector('.ol-zoom .ol-zoom-in').classList.add(c);
-          document.querySelector('.ol-zoom .ol-zoom-out').classList.add(c);
+          document.querySelector(".ol-zoom .ol-zoom-in").classList.add(c);
+          document.querySelector(".ol-zoom .ol-zoom-out").classList.add(c);
         });
       }
 
       // rotate
-      if (document.querySelector('.ol-rotate')) {
+      if (document.querySelector(".ol-rotate")) {
         classes.forEach(function (c) {
-          document.querySelector('.ol-rotate .ol-rotate-reset').classList.add(c);
+          document
+            .querySelector(".ol-rotate .ol-rotate-reset")
+            .classList.add(c);
         });
       }
     },
@@ -294,44 +294,53 @@ export default {
      * Adds the ol/interaction/DragAndDrop to the map and draws the dropped
      * features in a vector layer
      */
-    setupGeodataDragDrop () {
+    setupGeodataDragDrop() {
       const mapDdConf = this.mapGeodataDragDop;
-      const formats = mapDdConf.formats.filter(formatStr => {
-        return this.formatMapping[formatStr];
-      }).map(fs => {
-        return this.formatMapping[fs];
-      });
+      const formats = mapDdConf.formats
+        .filter((formatStr) => {
+          return this.formatMapping[formatStr];
+        })
+        .map((fs) => {
+          return this.formatMapping[fs];
+        });
 
       const dragAndDropInteraction = new DragAndDrop({
-        formatConstructors: formats
+        formatConstructors: formats,
       });
 
-      dragAndDropInteraction.on('addfeatures', event => {
-        let ddSource;
+      dragAndDropInteraction.on(
+        "addfeatures",
+        (event) => {
+          let ddSource;
 
-        if (mapDdConf.replaceData !== false) {
-          if (!this.dragDropLayerCreated) {
-            this.createDragDropLayer(mapDdConf);
-            this.dragDropLayerCreated = true;
+          if (mapDdConf.replaceData !== false) {
+            if (!this.dragDropLayerCreated) {
+              this.createDragDropLayer(mapDdConf);
+              this.dragDropLayerCreated = true;
+            }
+
+            // replace existing geodata with the newly dropped data set
+            const ddLayer = LayerUtil.getLayersBy(
+              "wegueDragDropLayer",
+              true,
+              this.map
+            )[0];
+            ddSource = ddLayer.getSource();
+            ddSource.clear();
+          } else {
+            // add new layer for each dropped data set
+            const newDdLayer = this.createDragDropLayer(mapDdConf);
+            ddSource = newDdLayer.getSource();
           }
 
-          // replace existing geodata with the newly dropped data set
-          const ddLayer = LayerUtil.getLayersBy(
-            'wegueDragDropLayer', true, this.map)[0];
-          ddSource = ddLayer.getSource();
-          ddSource.clear();
-        } else {
-          // add new layer for each dropped data set
-          const newDdLayer = this.createDragDropLayer(mapDdConf);
-          ddSource = newDdLayer.getSource();
-        }
+          ddSource.addFeatures(event.features);
 
-        ddSource.addFeatures(event.features);
-
-        if (mapDdConf.zoomToData === true) {
-          ViewAnimationUtil.to(this.map.getView(), ddSource.getExtent());
-        }
-      }, this);
+          if (mapDdConf.zoomToData === true) {
+            ViewAnimationUtil.to(this.map.getView(), ddSource.getExtent());
+          }
+        },
+        this
+      );
 
       return dragAndDropInteraction;
     },
@@ -341,17 +350,17 @@ export default {
      *
      * @param {Object} mapDdConf the config object for this functionality
      */
-    createDragDropLayer (mapDdConf) {
+    createDragDropLayer(mapDdConf) {
       const vectorSource = new VectorSource({});
       const vectorLayer = new VectorLayer({
         // random unique layer ID
         // For localization the randomized layer ID cannot be used, therefore map it to a fixed key
         // which will be part of the language path ('mapLayers.wgu-drag-drop-layer')
-        lid: 'wgu-drag-drop-layer-' + (Math.random() * 1000000).toFixed(0),
-        langKey: 'wgu-drag-drop-layer',
+        lid: "wgu-drag-drop-layer-" + (Math.random() * 1000000).toFixed(0),
+        langKey: "wgu-drag-drop-layer",
         wegueDragDropLayer: true,
         source: vectorSource,
-        displayInLayerList: mapDdConf.displayInLayerList
+        displayInLayerList: mapDdConf.displayInLayerList,
       });
       this.map.addLayer(vectorLayer);
 
@@ -370,49 +379,52 @@ export default {
      *
      * @param {ol.layer.Layer} OL layer instance
      */
-    updateLocalizedLayerProps (layer) {
-      const langKey = layer.get('langKey') || layer.get('lid');
-      const pathLayer = 'mapLayers.' + langKey;
+    updateLocalizedLayerProps(layer) {
+      const langKey = layer.get("langKey") || layer.get("lid");
+      const pathLayer = "mapLayers." + langKey;
 
       // Update layer name.
-      const pathName = pathLayer + '.name';
-      layer.set('name', layer.get('confName') || this.$t(pathName));
+      const pathName = pathLayer + ".name";
+      layer.set("name", layer.get("confName") || this.$t(pathName));
 
       // Update optional layer attributions.
-      const pathAttributions = pathLayer + '.attributions';
+      const pathAttributions = pathLayer + ".attributions";
       const source = layer.getSource();
-      if (source &&
-         (typeof source.setAttributions === 'function') &&
-         (layer.get('confAttributions') || this.$te(pathAttributions))) {
-        source.setAttributions(layer.get('confAttributions') || this.$t(pathAttributions));
+      if (
+        source &&
+        typeof source.setAttributions === "function" &&
+        (layer.get("confAttributions") || this.$te(pathAttributions))
+      ) {
+        source.setAttributions(
+          layer.get("confAttributions") || this.$t(pathAttributions)
+        );
       }
-    }
+    },
   },
   watch: {
     /**
      * Watch for locale changes and update language specific layer attributes.
      */
-    '$i18n.locale': function () {
+    "$i18n.locale": function () {
       const layers = this.map.getLayers();
-      layers.forEach(layer => {
+      layers.forEach((layer) => {
         this.updateLocalizedLayerProps(layer);
       });
-    }
-  }
-
-}
+    },
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style>
-  div.ol-zoom {
-    top: auto;
-    left: auto;
-    bottom: 3em;
-    right: 0.5em;
-  }
+div.ol-zoom {
+  top: auto;
+  left: auto;
+  bottom: 3em;
+  right: 0.5em;
+}
 
-  div.ol-attribution.ol-uncollapsible {
-    font-size: 10px;
-  }
+div.ol-attribution.ol-uncollapsible {
+  font-size: 10px;
+}
 </style>

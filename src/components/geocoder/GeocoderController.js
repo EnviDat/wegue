@@ -21,16 +21,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-import { OpenStreetMap } from './providers/osm';
-import { Photon } from './providers/photon';
-import { OpenCage } from './providers/opencage';
-import { json } from './helpers/ajax';
+import { OpenStreetMap } from "./providers/osm";
+import { Photon } from "./providers/photon";
+import { OpenCage } from "./providers/opencage";
+import { json } from "./helpers/ajax";
 
 // Geocoder Provider types
 export const PROVIDERS = {
   osm: OpenStreetMap,
   photon: Photon,
-  opencage: OpenCage
+  opencage: OpenCage,
 };
 
 /**
@@ -43,7 +43,7 @@ export class GeocoderController {
    * @param {Object} options config options for Provider
    * @param {Object} parent callback parent
    */
-  constructor (providerName, options, parent) {
+  constructor(providerName, options, parent) {
     this.options = options;
 
     // Must have Provider class defined for name
@@ -56,18 +56,18 @@ export class GeocoderController {
     this.parent = parent;
   }
 
-  async query (q) {
+  async query(q) {
     const parameters = this.provider.getParameters({
       query: q,
       key: this.options.key,
       lang: this.options.lang,
       countrycodes: this.options.countrycodes,
-      limit: this.options.limit
+      limit: this.options.limit,
     });
 
     const ajax = {
       url: parameters.url,
-      data: parameters.params
+      data: parameters.params,
     };
 
     // Optional XHR with JSONP (Provider-specific)
@@ -78,9 +78,9 @@ export class GeocoderController {
 
     try {
       const response = await json(ajax);
-      return this.provider.handleResponse(response)
+      return this.provider.handleResponse(response);
     } catch (err) {
-      return err
+      return err;
     }
 
     // // Do the query via Ajax XHR, returning JSON. Async callback via Promise.

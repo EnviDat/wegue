@@ -1,32 +1,31 @@
-import { Image as ImageLayer, Tile as TileLayer } from 'ol/layer';
-import ImageWMS from 'ol/source/ImageWMS';
-import TileWmsSource from 'ol/source/TileWMS';
-import OsmSource from 'ol/source/OSM';
-import VectorTileLayer from 'ol/layer/VectorTile'
-import VectorTileSource from 'ol/source/VectorTile'
-import MvtFormat from 'ol/format/MVT'
-import GeoJsonFormat from 'ol/format/GeoJSON'
-import TopoJsonFormat from 'ol/format/TopoJSON'
-import KmlFormat from 'ol/format/KML'
-import GML2Format from 'ol/format/GML2'
-import GML3Format from 'ol/format/GML3'
-import GML32Format from 'ol/format/GML32'
-import VectorLayer from 'ol/layer/Vector'
-import VectorSource from 'ol/source/Vector'
-import XyzSource from 'ol/source/XYZ'
-import { bbox as bboxStrategy } from 'ol/loadingstrategy';
-import { OlStyleFactory } from './OlStyle'
-import { applyTransform } from 'ol/extent';
-import { getTransform } from 'ol/proj';
-import axios from 'axios';
-import ObjectUtil from '../util/Object';
+import { Image as ImageLayer, Tile as TileLayer } from "ol/layer";
+import ImageWMS from "ol/source/ImageWMS";
+import TileWmsSource from "ol/source/TileWMS";
+import OsmSource from "ol/source/OSM";
+import VectorTileLayer from "ol/layer/VectorTile";
+import VectorTileSource from "ol/source/VectorTile";
+import MvtFormat from "ol/format/MVT";
+import GeoJsonFormat from "ol/format/GeoJSON";
+import TopoJsonFormat from "ol/format/TopoJSON";
+import KmlFormat from "ol/format/KML";
+import GML2Format from "ol/format/GML2";
+import GML3Format from "ol/format/GML3";
+import GML32Format from "ol/format/GML32";
+import VectorLayer from "ol/layer/Vector";
+import VectorSource from "ol/source/Vector";
+import XyzSource from "ol/source/XYZ";
+import { bbox as bboxStrategy } from "ol/loadingstrategy";
+import { OlStyleFactory } from "./OlStyle";
+import { applyTransform } from "ol/extent";
+import { getTransform } from "ol/proj";
+import axios from "axios";
+import ObjectUtil from "../util/Object";
 
 /**
  * Factory, which creates OpenLayers layer instances according to a given config
  * object.
  */
 export const LayerFactory = {
-
   /**
    * Maps the format literal of the config to the corresponding OL module.
    * @type {Object}
@@ -38,7 +37,7 @@ export const LayerFactory = {
     KML: KmlFormat,
     GML2: GML2Format,
     GML3: GML3Format,
-    GML32: GML32Format
+    GML32: GML32Format,
   },
 
   /**
@@ -46,10 +45,10 @@ export const LayerFactory = {
    * @type {Object}
    */
   wfsFormatMapping: {
-    GeoJSON: 'application/json',
-    GML2: 'text/xml; subtype=gml/2.1.2',
-    GML3: 'text/xml; subtype=gml/3.1.1',
-    GML32: 'text/xml; subtype=gml/3.2'
+    GeoJSON: "application/json",
+    GML2: "text/xml; subtype=gml/2.1.2",
+    GML3: "text/xml; subtype=gml/3.1.1",
+    GML32: "text/xml; subtype=gml/3.2",
   },
 
   /**
@@ -59,21 +58,21 @@ export const LayerFactory = {
    * @param  {ol/Map} olMap  Optional OL map we work on
    * @return {ol/layer/Base} OL layer instance
    */
-  getInstance (lConf, olMap) {
+  getInstance(lConf, olMap) {
     // create correct layer type
-    if (lConf.type === 'TILEWMS') {
+    if (lConf.type === "TILEWMS") {
       return this.createTileWmsLayer(lConf);
-    } else if (lConf.type === 'IMAGEWMS') {
+    } else if (lConf.type === "IMAGEWMS") {
       return this.createImageWmsLayer(lConf);
-    } else if (lConf.type === 'WFS') {
+    } else if (lConf.type === "WFS") {
       return this.createWfsLayer(lConf, olMap);
-    } else if (lConf.type === 'XYZ') {
+    } else if (lConf.type === "XYZ") {
       return this.createXyzLayer(lConf);
-    } else if (lConf.type === 'OSM') {
+    } else if (lConf.type === "OSM") {
       return this.createOsmLayer(lConf);
-    } else if (lConf.type === 'VECTOR') {
+    } else if (lConf.type === "VECTOR") {
       return this.createVectorLayer(lConf);
-    } else if (lConf.type === 'VECTORTILE') {
+    } else if (lConf.type === "VECTORTILE") {
       return this.createVectorTileLayer(lConf);
     } else {
       return null;
@@ -86,7 +85,7 @@ export const LayerFactory = {
    * @param  {Object} lConf  Layer config object
    * @return {Object} OL layer options
    */
-  getCommonLayerOptions (lConf) {
+  getCommonLayerOptions(lConf) {
     return {
       lid: lConf.lid,
       isBaseLayer: lConf.isBaseLayer,
@@ -102,7 +101,7 @@ export const LayerFactory = {
       confAttributions: lConf.attributions,
       legend: lConf.legend,
       legendUrl: lConf.legendUrl,
-      legendOptions: lConf.legendOptions
+      legendOptions: lConf.legendOptions,
     };
   },
 
@@ -112,7 +111,7 @@ export const LayerFactory = {
    * @param  {Object} lConf  Layer config object
    * @return {ol.layer.Image} OL WMS layer instance
    */
-  createImageWmsLayer (lConf) {
+  createImageWmsLayer(lConf) {
     // apply additional HTTP params
     const params = { LAYERS: lConf.layers };
     ObjectUtil.mergeDeep(params, lConf.params);
@@ -129,8 +128,8 @@ export const LayerFactory = {
         crossOrigin: lConf.crossOrigin,
         hoverable: lConf.hoverable,
         hoverAttribute: lConf.hoverAttribute,
-        hoverOverlay: lConf.hoverOverlay
-      })
+        hoverOverlay: lConf.hoverOverlay,
+      }),
     });
 
     return layer;
@@ -142,7 +141,7 @@ export const LayerFactory = {
    * @param  {Object} lConf  Layer config object
    * @return {ol.layer.Tile} OL Tiled WMS layer instance
    */
-  createTileWmsLayer (lConf) {
+  createTileWmsLayer(lConf) {
     // apply additional HTTP params
     const params = { LAYERS: lConf.layers };
     ObjectUtil.mergeDeep(params, lConf.params);
@@ -158,8 +157,8 @@ export const LayerFactory = {
         crossOrigin: lConf.crossOrigin,
         hoverable: lConf.hoverable,
         hoverAttribute: lConf.hoverAttribute,
-        hoverOverlay: lConf.hoverOverlay
-      })
+        hoverOverlay: lConf.hoverOverlay,
+      }),
     });
 
     return layer;
@@ -180,10 +179,10 @@ export const LayerFactory = {
     }
     // set a default WFS version if not set in config
     if (!lConf.version) {
-      lConf.version = '1.1.0';
+      lConf.version = "1.1.0";
     }
     if (!lConf.format) {
-      lConf.format = 'GML3';
+      lConf.format = "GML3";
     }
 
     // detect the WFS output format
@@ -199,34 +198,47 @@ export const LayerFactory = {
       format: new this.formatMapping[lConf.format](lConf.formatConfig),
       loader: (extent) => {
         // assemble WFS GetFeature request
-        let wfsRequest = lConf.url + '?service=WFS&' +
-          'version=' + lConf.version + '&request=GetFeature&' +
-          'typename=' + lConf.typeName + '&' +
-          'outputFormat=' + outputFormat + '&srsname=' + lConf.projection;
+        let wfsRequest =
+          lConf.url +
+          "?service=WFS&" +
+          "version=" +
+          lConf.version +
+          "&request=GetFeature&" +
+          "typename=" +
+          lConf.typeName +
+          "&" +
+          "outputFormat=" +
+          outputFormat +
+          "&srsname=" +
+          lConf.projection;
 
         // add WFS version dependent feature limitation
         if (Number.isInteger(parseInt(lConf.maxFeatures))) {
-          if (lConf.version.startsWith('1.')) {
-            wfsRequest += '&maxFeatures=' + lConf.maxFeatures;
+          if (lConf.version.startsWith("1.")) {
+            wfsRequest += "&maxFeatures=" + lConf.maxFeatures;
           } else {
-            wfsRequest += '&count=' + lConf.maxFeatures;
+            wfsRequest += "&count=" + lConf.maxFeatures;
           }
         }
         // add bbox filter
         if (lConf.loadOnlyVisible !== false) {
           if (mapSrs !== lConf.projection) {
-            extent = applyTransform(extent, getTransform(mapSrs, lConf.projection));
+            extent = applyTransform(
+              extent,
+              getTransform(mapSrs, lConf.projection)
+            );
           }
-          wfsRequest += '&bbox=' + extent.join(',') + ',' + lConf.projection + '';
+          wfsRequest +=
+            "&bbox=" + extent.join(",") + "," + lConf.projection + "";
         }
 
         // load data from WFS, parse and add to vector source
         const request = {
-          method: 'GET',
-          url: wfsRequest
+          method: "GET",
+          url: wfsRequest,
         };
         axios(request)
-          .then(response => {
+          .then((response) => {
             const feats = vectorSource.getFormat().readFeatures(response.data);
             vectorSource.addFeatures(feats);
           })
@@ -234,7 +246,7 @@ export const LayerFactory = {
             vectorSource.removeLoadedExtent(extent);
           });
       },
-      strategy: lConf.loadOnlyVisible !== false ? bboxStrategy : undefined
+      strategy: lConf.loadOnlyVisible !== false ? bboxStrategy : undefined,
     });
 
     const vector = new VectorLayer({
@@ -244,7 +256,7 @@ export const LayerFactory = {
       columnMapping: lConf.columnMapping,
       hoverable: lConf.hoverable,
       hoverAttribute: lConf.hoverAttribute,
-      hoverOverlay: lConf.hoverOverlay
+      hoverOverlay: lConf.hoverOverlay,
     });
 
     return vector;
@@ -256,15 +268,15 @@ export const LayerFactory = {
    * @param  {Object} lConf  Layer config object
    * @return {ol.layer.Tile} OL XYZ layer instance
    */
-  createXyzLayer (lConf) {
+  createXyzLayer(lConf) {
     const xyzLayer = new TileLayer({
       ...this.getCommonLayerOptions(lConf),
       source: new XyzSource({
         url: lConf.url,
         tileGrid: lConf.tileGrid,
         projection: lConf.projection,
-        crossOrigin: lConf.crossOrigin
-      })
+        crossOrigin: lConf.crossOrigin,
+      }),
     });
 
     return xyzLayer;
@@ -276,12 +288,12 @@ export const LayerFactory = {
    * @param  {Object} lConf  Layer config object
    * @return {ol.layer.Tile} OL OSM layer instance
    */
-  createOsmLayer (lConf) {
+  createOsmLayer(lConf) {
     const layer = new TileLayer({
       ...this.getCommonLayerOptions(lConf),
       source: new OsmSource({
-        crossOrigin: lConf.crossOrigin
-      })
+        crossOrigin: lConf.crossOrigin,
+      }),
     });
 
     return layer;
@@ -293,18 +305,18 @@ export const LayerFactory = {
    * @param  {Object} lConf  Layer config object
    * @return {ol.layer.Vector} OL vector layer instance
    */
-  createVectorLayer (lConf) {
+  createVectorLayer(lConf) {
     const vectorLayer = new VectorLayer({
       ...this.getCommonLayerOptions(lConf),
       source: new VectorSource({
         url: lConf.url,
-        format: new this.formatMapping[lConf.format](lConf.formatConfig)
+        format: new this.formatMapping[lConf.format](lConf.formatConfig),
       }),
       style: OlStyleFactory.getInstance(lConf.style),
       columnMapping: lConf.columnMapping,
       hoverable: lConf.hoverable,
       hoverAttribute: lConf.hoverAttribute,
-      hoverOverlay: lConf.hoverOverlay
+      hoverOverlay: lConf.hoverOverlay,
     });
 
     return vectorLayer;
@@ -316,22 +328,21 @@ export const LayerFactory = {
    * @param  {Object} lConf  Layer config object
    * @return {ol.layer.VectorTile} OL vector tile layer instance
    */
-  createVectorTileLayer (lConf) {
+  createVectorTileLayer(lConf) {
     const vtLayer = new VectorTileLayer({
       ...this.getCommonLayerOptions(lConf),
       source: new VectorTileSource({
         url: lConf.url,
         format: new this.formatMapping[lConf.format](),
         tileGrid: lConf.tileGrid,
-        projection: lConf.projection
+        projection: lConf.projection,
       }),
       style: OlStyleFactory.getInstance(lConf.style),
       hoverable: lConf.hoverable,
       hoverAttribute: lConf.hoverAttribute,
-      hoverOverlay: lConf.hoverOverlay
+      hoverOverlay: lConf.hoverOverlay,
     });
 
     return vtLayer;
-  }
-
-}
+  },
+};

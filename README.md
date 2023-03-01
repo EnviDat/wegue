@@ -1,4 +1,5 @@
 # Wegue (WebGIS with OpenLayers and Vue.js)
+
 Template and re-usable components for webmapping applications with OpenLayers and Vue.js
 
 ![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/wegue-oss/wegue/ci-tests.yml?branch=master)
@@ -13,12 +14,14 @@ Template and re-usable components for webmapping applications with OpenLayers an
 Go to the online demo at https://wegue-oss.github.io/wegue/
 
 ## About
+
 Wegue (**We**b**G**IS with OpenLayers and V**ue**) combines the power of [Vue.js](https://vuejs.org/) and the geospatial savvy of [OpenLayers](https://openlayers.org) to make lightweight webmapping applications. For styling and pre-defined UI-components the Material Design
 Component Framework [Vuetify](https://vuetifyjs.com/) is used.
 
 It acts as a template to reduce boilerplate work for browser-based mapping applications.
 
 ### Want to contribute? Yes, please :grinning:
+
 If you want to contribute, please open a Pull Request in the repository.
 
 Ensure that you have clean commits (and messages) and a meaningful description in your PR. Maybe opening an issue first is a good idea.
@@ -31,25 +34,25 @@ Prerequisites: Node.js and npm need to be available on your system.
 
 ### Dev Setup
 
-  - Checkout / download this repository and navigate to the   checkout / download in a terminal (e.g. by `cd /path/to/checkout`).
+- Checkout / download this repository and navigate to the checkout / download in a terminal (e.g. by `cd /path/to/checkout`).
 
-  - Install the JS dependencies:
+- Install the JS dependencies:
 
-``` bash
+```bash
 # install dependencies
 npm install
 ```
 
-  - Run the init-app script, which creates a base application (a copy of the `app-starter` dir) under `app/` to extend with custom components and resources (e.g. CSS styling) for your project.
+- Run the init-app script, which creates a base application (a copy of the `app-starter` dir) under `app/` to extend with custom components and resources (e.g. CSS styling) for your project.
 
-``` bash
+```bash
 # initializes the Wegue app
 npm run init:app
 ```
 
-  - Start the dev server with auto reload at http://localhost:8081 (will be opened automatically):
+- Start the dev server with auto reload at http://localhost:8081 (will be opened automatically):
 
-``` bash
+```bash
 # serve with hot reload at localhost:8081
 npm run serve
 ```
@@ -58,7 +61,7 @@ npm run serve
 
 To run all unit tests using Karma test runner execute the following:
 
-``` bash
+```bash
 # run all tests
 npm run test
 ```
@@ -66,6 +69,7 @@ npm run test
 NB the unit tests require Chrome or Chromium browser executable to be found.
 
 On Mac OSX with `Homebrew` package manager this should work:
+
 ```
 brew cask install chromium;
 export CHROME_BIN=/Applications/Chromium.app/Contents/MacOS/Chromium;
@@ -78,7 +82,7 @@ More testing tips and tricks can be found in the [Unit Test README](test/README.
 
 Run the build script in order to create a production build, which can be copied / deployed to a web server. The output will be placed in the `dist/` folder
 
-``` bash
+```bash
 # build for production with minification
 npm run build
 ```
@@ -87,7 +91,7 @@ npm run build
 
 Run the lint script in order to lint all your files without fixing the errors. The problems will be reported in the console only.
 
-``` bash
+```bash
 npm run lint
 ```
 
@@ -95,7 +99,7 @@ npm run lint
 
 Run the lint script in order to lint all your files and fix the errors at the same time.
 
-``` bash
+```bash
 npm run lint:fix
 ```
 
@@ -108,20 +112,21 @@ See [Configuration Reference](https://cli.vuejs.org/config/).
 Versioned Docker images are available on [DockerHub](https://hub.docker.com/r/meggsimum/wegue/tags).
 Run the `latest` (`master`) version of the Wegue Docker Image as follows:
 
-``` bash
+```bash
 docker run -it -p 8080:80 meggsimum/wegue:latest
 ```
 
 Open
-  - http://127.0.0.1:8080/ or
-  - http://localhost:8080/?appCtx=minimal or
-  - http://localhost:8080/?appCtx=projected
+
+- http://127.0.0.1:8080/ or
+- http://localhost:8080/?appCtx=minimal or
+- http://localhost:8080/?appCtx=projected
 
 in a browser.
 
 Use Docker Volume Mapping to run with your custom Wegue JSON config:
 
-``` bash
+```bash
 docker run -it -p 8080:80 -v $(pwd)/app-conf-mine.json:/usr/share/nginx/html/static/app-conf-mine.json meggsimum/wegue:latest
 ```
 
@@ -129,7 +134,7 @@ and open http://localhost:8080/?appCtx=mine.
 
 You can even overwrite the default config `app-conf.json`:
 
-``` bash
+```bash
 docker run -it -p 8080:80 -v $(pwd)/app-conf-mine.json:/usr/share/nginx/html/static/app-conf.json meggsimum/wegue:latest
 ```
 
@@ -137,7 +142,7 @@ and then open http://localhost:8080/.
 
 Build a Wegue Docker Image as follows:
 
-``` bash
+```bash
 docker build -t meggsimum/wegue:latest .
 ```
 
@@ -149,9 +154,10 @@ Gitpod.io is an online IDE using VS Code that also provides a terminal and enabl
 
 Open [gitpod.io/#https://github.com/wegue-oss/wegue/](https://gitpod.io/#https://github.com/wegue-oss/wegue/) to get started.
 
-Wegue will automatically be initiated and your Wegue application can be previewed in a pane of the online IDE. The live preview of Wegue can also be seen in another browser tab by prefixing your workspace sub-URL with `8081-`. For example  `https://8081-YOUR-WORKSPACE-NAME.ws-eu25.gitpod.io`.
+Wegue will automatically be initiated and your Wegue application can be previewed in a pane of the online IDE. The live preview of Wegue can also be seen in another browser tab by prefixing your workspace sub-URL with `8081-`. For example `https://8081-YOUR-WORKSPACE-NAME.ws-eu25.gitpod.io`.
 
 ## Commercial Support
+
 You need professional support or teachings for Wegue? Please contact a service provider listed below:
 
 [![meggsimum logo](https://meggsimum.de/img/logo.png "meggsimum")](https://meggsimum.de)

@@ -1,4 +1,4 @@
-import ViewAnimationUtil from './ViewAnimation';
+import ViewAnimationUtil from "./ViewAnimation";
 
 /**
  * Util class for OL layers
@@ -12,7 +12,7 @@ const LayerUtil = {
    * @param  {ol.Map} olMap  The OL map to search in
    * @return {ol.layer.Base[]} Array of matching layers
    */
-  getLayersBy (key, value, olMap) {
+  getLayersBy(key, value, olMap) {
     if (!olMap) {
       return [];
     }
@@ -34,8 +34,8 @@ const LayerUtil = {
    * @param  {ol.Map} olMap  The OL map to search in
    * @return {ol.layer.Base} The OL layer instance or undefined
    */
-  getLayerByLid (lid, olMap) {
-    return LayerUtil.getLayersBy('lid', lid, olMap)[0];
+  getLayerByLid(lid, olMap) {
+    return LayerUtil.getLayersBy("lid", lid, olMap)[0];
   },
 
   /**
@@ -45,13 +45,13 @@ const LayerUtil = {
    * @param  {ol.layer.Base} vecLayer OL vector layer
    * @param  {ol.Map} olMap           The map to perform the zoom on
    */
-  zoomToLayerExtent (vecLayer, olMap) {
+  zoomToLayerExtent(vecLayer, olMap) {
     if (!vecLayer || !vecLayer.getSource().getExtent || !olMap) {
       return;
     }
     const extent = vecLayer.getSource().getExtent();
     ViewAnimationUtil.to(olMap.getView(), extent);
-  }
-}
+  },
+};
 
 export default LayerUtil;

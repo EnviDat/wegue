@@ -2,12 +2,13 @@
 
 The default/standard command to run all tests:
 
-``` bash
+```bash
 # run all tests
 npm test
 ```
 
 ## Calling Karma Directly
+
 `npm test` will eventually call `karma start test/unit/karma.conf.js --single-run`.
 
 To have more control over options like debugging and single file, we can call Karma directly from the root of the project:
@@ -52,13 +53,13 @@ karma start test/unit/karma.conf.js --browsers=Chrome --no-single-run
 Here the Chromium (or Chrome) browser (`--browsers=Chrome`) overrules `ChromeHeadless` from Karma config and is launched staying active after
 the test suite has been executed (`--no-single-run`). Then:
 
-* go to the browser window
-* click on "Debug" button
-* open Chrome devtools via "Inspect" (Mac OSX keyboard: `Alt-Cmd-i`)
-* Devtools: open the Sources tab
-* Devtools Sources: open `webpack` folder and find both the test `*.spec.js`   files and application files (`*.vue`)
-* Devtools Sources: set a breakpoint in a test or source file
-* reload browser window, processing halts at breakpoint, see image below.
+- go to the browser window
+- click on "Debug" button
+- open Chrome devtools via "Inspect" (Mac OSX keyboard: `Alt-Cmd-i`)
+- Devtools: open the Sources tab
+- Devtools Sources: open `webpack` folder and find both the test `*.spec.js` files and application files (`*.vue`)
+- Devtools Sources: set a breakpoint in a test or source file
+- reload browser window, processing halts at breakpoint, see image below.
 
 ![alt text](debug-karma.jpg)
 

@@ -1,13 +1,13 @@
 <script>
 // Control to switch between light and dark mode
 
-import ToggleButton from '../modulecore/ToggleButton.vue';
-import { ColorTheme } from '../../mixins/ColorTheme';
+import ToggleButton from "../modulecore/ToggleButton.vue";
+import { ColorTheme } from "../../mixins/ColorTheme";
 
 export default {
   extends: ToggleButton,
 
-  name: 'wgu-themeswitcher',
+  name: "wgu-themeswitcher",
   mixins: [ColorTheme],
 
   watch: {
@@ -19,7 +19,7 @@ export default {
           this.show = value;
         }
       },
-      immediate: true
+      immediate: true,
     },
 
     show: {
@@ -31,8 +31,8 @@ export default {
           // returns undefined, so we !!undefined
           this.$vuetify.theme.dark = !!value;
         }
-      }
-    }
-  }
+      },
+    },
+  },
 };
 </script>
