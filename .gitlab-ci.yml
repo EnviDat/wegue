@@ -53,4 +53,4 @@ rclone-sync:
   script:
     - >
       rclone --verbose sync
-      dist switch:gendib --exclude 'favicon.ico'
+      dist switch:map --exclude 'favicon.ico'
